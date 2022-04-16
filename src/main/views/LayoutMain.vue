@@ -1,3 +1,10 @@
+<script setup>
+import { defineAsyncComponent } from "vue";
+const HomePage = defineAsyncComponent(() =>
+  import("../components/HomePage.vue")
+);
+</script>
+
 <template>
   <div class="flex-col mainLayout">
     <!-- 头部 -->
@@ -9,28 +16,16 @@
       <HomePage v-if="$route.path == '/'" class="flex-1" />
       <!-- 内页 -->
       <router-view v-else class="flex-1 main" />
-        
     </div>
   </div>
 </template>
 
-<script>
-
-export default {
-  components: {
-    HomePage: () => import("../components/HomePage.vue"),
-  },
-  data() {
-    return {};
-  },
-  
-};
-</script>
-
 <style scoped>
 @import url(../assets/style.css);
 
-/* 内容快 */
+.mainLayout {
+  height: 100%;
+}
 .mainLayout .main {
   padding: 0 20px;
 }

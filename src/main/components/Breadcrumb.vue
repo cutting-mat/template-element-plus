@@ -1,16 +1,19 @@
 <template>
   <div class="breadcrumb flex-row align-center">
-    <i class="el-icon-s-home _home"></i>
+    <el-icon class="_home"><home-filled /></el-icon>
     <el-breadcrumb class="flex-1" separator="/">
       <template v-for="route in $route.matched">
-        <el-breadcrumb-item :key="route.path" :to="route" v-if="!route.meta.hide">{{
-          route.meta.title || route.name
-        }}</el-breadcrumb-item>
+        <el-breadcrumb-item
+          :key="route.path"
+          :to="route"
+          v-if="!route.meta.hide"
+          >{{ route.meta.title || route.name }}</el-breadcrumb-item
+        >
       </template>
     </el-breadcrumb>
     <slot>
       <el-button type="text" @click="$router.go(-1)">
-        <i class="el-icon-back"></i> 返回
+        <el-icon><back /></el-icon> 返回
       </el-button>
     </slot>
   </div>
@@ -31,5 +34,4 @@ export default {};
   color: #9b9b9b;
   margin-right: 6px;
 }
-
 </style>

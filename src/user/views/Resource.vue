@@ -14,7 +14,6 @@
       <!-- 表单 -->
       <el-form
         class="resourceEditFrom"
-        size="small"
         ref="editForm"
         :rules="rules"
         :model="editForm"
@@ -61,10 +60,13 @@
 <script>
 import { buildTree, deepcopy } from "@/core";
 import * as resource from "../api/resource";
+import { defineAsyncComponent } from "vue";
 
 export default {
   components: {
-    TheResourcePicker: () => import("@/user/components/TheResourcePicker.vue"),
+    TheResourcePicker: defineAsyncComponent(() =>
+      import("@/user/components/TheResourcePicker.vue")
+    ),
   },
   data() {
     const checkMethod = (rule, value, callback) => {

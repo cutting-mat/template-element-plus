@@ -1,6 +1,6 @@
 <template>
   <el-table-column v-bind="column">
-    <template slot-scope="scope">
+    <template #default="scope">
       <div v-if="column.slotName && column.slotName.split">
         <!-- slot自定义内容 -->
         <slot
@@ -75,5 +75,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

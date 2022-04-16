@@ -1,13 +1,8 @@
 <template>
   <div v-loading="loading">
     <ToolBar>
-      <el-button
-        v-auth="role.add"
-        type="primary"
-        size="small"
-        icon="el-icon-plus"
-        @click="dialogVisible = true"
-      >
+      <el-button v-auth="role.add" type="primary" @click="dialogVisible = true">
+        <el-icon><plus /></el-icon>
         添加
       </el-button>
     </ToolBar>
@@ -22,10 +17,9 @@
       <el-table-column prop="remark" label="备注"></el-table-column>
 
       <el-table-column label="操作" width="300" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button
             v-auth="role.edit"
-            size="mini"
             type="info"
             plain
             @click="edit(scope.row)"
@@ -33,7 +27,6 @@
           >
           <el-button
             v-auth="role.remove"
-            size="mini"
             type="danger"
             plain
             @click="remove(scope.row)"
@@ -46,14 +39,13 @@
     <!-- 弹窗 -->
     <el-dialog
       :close-on-click-modal="false"
-      class="comDialog"
+      custom-class="comDialog"
       title="权限信息"
-      :visible="dialogVisible"
+      v-model="dialogVisible"
       width="600px"
       @close="handleCloseDialog"
     >
       <el-form
-        size="small"
         ref="editForm"
         :rules="rules"
         :model="editForm"
@@ -78,10 +70,12 @@
           />
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="save">确 定</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="save">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -89,10 +83,13 @@
 <script>
 import { deepcopy } from "@/core";
 import * as role from "../api/role";
+import { defineAsyncComponent } from "vue";
 
 export default {
   components: {
-    TheResourcePicker: () => import("@/user/components/TheResourcePicker.vue"),
+    TheResourcePicker: defineAsyncComponent(() =>
+      import("@/user/components/TheResourcePicker.vue")
+    ),
   },
   data() {
     return {
@@ -129,7 +126,7 @@ export default {
   methods: {
     edit(data) {
       this.editForm = deepcopy(data);
-      this.$set(this.editForm, "resources", data.resources);
+      this.editForm.resources = data.resources;
       this.dialogVisible = true;
     },
     save() {

@@ -1,22 +1,20 @@
 <template>
   <el-drawer
-    :visible="visible"
+    v-model="visible"
     direction="rtl"
     size="900px"
     :withHeader="false"
     @opened="handleInit"
     @close="requireClose"
-    v-loading.fullscreen="loading"
   >
-    <div class="myform flex-col">
+    <div class="myform flex-col" v-loading="loading">
       <ToolBar title="字典数据维护" :back="requireClose">
         <el-button
           v-auth="dict.itemAdd"
           type="primary"
-          size="small"
-          icon="el-icon-plus"
           @click="dialogVisible = true"
         >
+          <el-icon><plus /></el-icon>
           添加数据
         </el-button>
       </ToolBar>
@@ -35,22 +33,15 @@
             align="center"
           ></el-table-column>
           <el-table-column label="操作" width="300" align="center">
-            <template slot-scope="scope">
-              <el-button
-                v-auth="dict.itemEdit"
-                size="mini"
-                @click="edit(scope.row)"
+            <template #default="scope">
+              <el-button v-auth="dict.itemEdit" @click="edit(scope.row)"
                 >编辑</el-button
               >
-              <el-button
-                v-auth="dict.itemEdit"
-                size="mini"
-                @click="append(scope.row)"
+              <el-button v-auth="dict.itemEdit" @click="append(scope.row)"
                 >添加下级</el-button
               >
               <el-button
                 v-auth="dict.itemRemove"
-                size="mini"
                 type="danger"
                 plain
                 @click="remove(scope.row)"
@@ -64,13 +55,12 @@
       <el-dialog
         :close-on-click-modal="false"
         title="字典数据"
-        :visible="dialogVisible"
+        v-model="dialogVisible"
         width="600px"
         append-to-body
         @close="handleCloseDialog"
       >
         <el-form
-          size="small"
           ref="editForm"
           :rules="rules"
           :model="editForm"
@@ -83,10 +73,12 @@
             <el-input v-model="editForm.dictCode"></el-input>
           </el-form-item>
         </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="save">确 定</el-button>
-          <el-button @click="dialogVisible = false">取 消</el-button>
-        </span>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button type="primary" @click="save">确 定</el-button>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+          </div>
+        </template>
       </el-dialog>
     </div>
   </el-drawer>
@@ -145,12 +137,12 @@ export default {
   },
   watch: {
     dictCode: function () {
-      this.$set(this.queryParam, "dictCode", this.dictCode);
+      this.queryParam.dictCode = this.dictCode;
     },
   },
   methods: {
     append(data) {
-      this.$set(this.editForm, "pid", data.id);
+      this.editForm.pid = data.id;
       this.dialogVisible = true;
     },
     edit(data) {

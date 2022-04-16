@@ -9,22 +9,30 @@
     ></el-input>
     <!-- 弹窗 -->
     <el-dialog
-      class="custom-dialog"
+      custom-class="custom-dialog"
       append-to-body
       :close-on-click-modal="false"
       title="选择组织"
-      :visible.sync="dialogVisible"
+      v-model="dialogVisible"
       width="1000px"
       @open="dialogOpen"
     >
-    
       <div class="orgPicker">
-        <OrgTree v-if="dialogVisible" :value="list" picker @pick="checkedNode = $event"></OrgTree>
+        <OrgTree
+          v-if="dialogVisible"
+          :value="list"
+          picker
+          @pick="checkedNode = $event"
+        ></OrgTree>
       </div>
 
       <div slot="footer">
-        <el-button size="medium" type="primary" @click="submit">确 定</el-button>
-        <el-button size="medium" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="medium" type="primary" @click="submit"
+          >确 定</el-button
+        >
+        <el-button size="medium" @click="dialogVisible = false"
+          >取 消</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -33,14 +41,11 @@
 <script>
 import { buildTree, deepcopy } from "@/core";
 import { list } from "../api/org";
+import { defineAsyncComponent } from "vue";
 
 export default {
-  model: {
-    prop: "value",
-    event: "change",
-  },
   props: {
-    value: {
+    modelValue: {
       // 已选中机构id
       type: [Number, String],
       required: false,
@@ -50,8 +55,8 @@ export default {
       type: Function,
       required: false,
       default(value, obj) {
-        return obj.name || value
-      }
+        return obj.name || value;
+      },
     },
     size: {
       type: String,
@@ -60,7 +65,7 @@ export default {
     },
   },
   components: {
-    OrgTree: resolve => require(["../components/OrgTree"], resolve),
+    OrgTree: defineAsyncComponent(() => require("../components/OrgTree")),
   },
   data() {
     return {
@@ -73,13 +78,13 @@ export default {
   },
   computed: {
     showTitle() {
-      return this.adapter(this.value, this.submitNode);
+      return this.adapter(this.modelValue, this.submitNode);
     },
   },
   methods: {
     dialogOpen() {
-      this.checkedNode = {}
-      this.submitNode = {}
+      this.checkedNode = {};
+      this.submitNode = {};
     },
     fetchData: function () {
       this.loading = true;
@@ -96,13 +101,12 @@ export default {
     },
     submit() {
       if (this.checkedNode && this.checkedNode[0]) {
-        this.submitNode = deepcopy(this.checkedNode[0])
-        this.$emit("change", this.checkedNode[0].id);
+        this.submitNode = deepcopy(this.checkedNode[0]);
+        this.$emit("update:modelValue", this.checkedNode[0].id);
       }
 
       this.dialogVisible = false;
     },
-
   },
   created() {
     this.fetchData();

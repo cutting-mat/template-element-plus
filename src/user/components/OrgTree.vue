@@ -16,12 +16,12 @@
     <el-table-column prop="name" label="名称"></el-table-column>
     <el-table-column prop="fullName" label="全称"></el-table-column>
     <el-table-column label="创建时间">
-      <template slot-scope="scope">{{
+      <template #default="scope">{{
         $filter.date(scope.row.createTime)
       }}</template>
     </el-table-column>
     <el-table-column label="操作" width="260">
-      <template slot-scope="scope">
+      <template #default="scope">
         <slot name="action" :row="scope.row" />
       </template>
     </el-table-column>

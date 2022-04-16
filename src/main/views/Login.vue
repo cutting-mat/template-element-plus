@@ -8,6 +8,7 @@
         :model="formData"
         :rules="rules"
         class="login-form"
+        size="large"
         @submit.native.prevent="login"
       >
         <h2 class="sub-title">
@@ -64,12 +65,15 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from "vue";
 import { event } from "@/core";
 import { login } from "@/main/api/common";
 
 export default {
   components: {
-    inputCapthaImage: () => import("../components/InputCaptchaImage.vue"),
+    inputCapthaImage: defineAsyncComponent(() =>
+      import("../components/InputCaptchaImage.vue")
+    ),
   },
   data() {
     const validImage = () => {
@@ -132,7 +136,8 @@ export default {
                 this.loading = false;
                 // 登录后全局发布 login 事件, 将被 权限模块 接收
                 event.emit("login", {
-                  redirect: this.$router.currentRoute.query.redirect || "/",
+                  redirect:
+                    this.$router.currentRoute.value.query.redirect || "/",
                   data: res.data,
                 });
               } else {

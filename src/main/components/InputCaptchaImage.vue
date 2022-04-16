@@ -5,20 +5,22 @@
     v-bind="$attrs"
     class="InputCaptchaImage"
   >
-    <div
-      class="valid_image_wrap flex-row align-center"
-      slot="append"
-      :style="{ height: imgHeight, width: imgWidth, margin: '0 -20px' }"
-      @click="fetchData"
-    >
-      加载中...
-      <img
-        v-if="!loading && img.src"
-        class="valid_image"
-        :src="img.src"
-        style="height: 100%; width: 100%; object-fit: contain"
-      />
-    </div>
+    <template #append>
+      <div
+        class="valid_image_wrap flex-row align-center"
+        slot="append"
+        :style="{ height: imgHeight, width: imgWidth, margin: '0 -20px' }"
+        @click="fetchData"
+      >
+        加载中...
+        <img
+          v-if="!loading && img.src"
+          class="valid_image"
+          :src="img.src"
+          style="height: 100%; width: 100%; object-fit: contain"
+        />
+      </div>
+    </template>
   </el-input>
 </template>
 
@@ -97,13 +99,13 @@ export default {
 </script>
 
 <style scoped>
-.InputCaptchaImage >>> .valid_image_wrap {
+.InputCaptchaImage :deep(.valid_image_wrap) {
   position: relative;
   overflow: hidden;
   text-align: center;
   cursor: pointer;
 }
-.InputCaptchaImage >>> .valid_image {
+.InputCaptchaImage :deep(.valid_image) {
   position: absolute;
   left: 0;
   top: 0;

@@ -1,14 +1,17 @@
 /**
  * 全局组件
  * */
+import { defineAsyncComponent } from "vue";
 import Header from '@/main/components/Header.vue'
+import SubNav from '@/main/components/SubNav.vue'
+import ToolBar from '@/main/components/ToolBar.vue'
+import Pagination from '@/main/components/Pagination.vue'
 
 export const components = {
     Header,
-    ElBreadcrumb: () => import("@/main/components/ElBreadcrumb.vue"),
-    SubNav: () => import("@/main/components/SubNav.vue"),
-    Pagination: () => import("@/main/components/Pagination.vue"),
-    ToolBar: () => import("@/main/components/ToolBar.vue"),
+    SubNav,
+    ToolBar,
+    Pagination,
 }
 
 /**
@@ -25,7 +28,7 @@ export const filters = {
  * */
 export const directives = {
     'test': {
-        inserted(el) {
+        mounted(el) {
             setTimeout(() => {
                 el.innerText += ' test directive inject!'
             }, 0)

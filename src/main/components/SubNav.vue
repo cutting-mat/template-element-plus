@@ -1,86 +1,90 @@
 <template>
-  <div v-if="showMenu" class="custom-menu scrollbar">
-    <el-menu :default-active="activeIndex" router unique-opened>
-      <template v-for="(route, index) in list">
-        <el-submenu
-          v-if="route.children && route.children.length"
-          :route="route"
-          :index="route.name"
-          :key="'nav' + index"
-        >
-          <div slot="title" class="first flex-row align-center">
+  <el-menu
+    v-if="showMenu"
+    class="custom-menu scrollbar"
+    :default-active="activeIndex"
+    router
+    unique-opened
+  >
+    <template v-for="(route, index) in list">
+      <el-sub-menu
+        v-if="route.children && route.children.length"
+        :route="route"
+        :index="route.name"
+        :key="'nav' + index"
+      >
+        <template #title>
+          <div class="first flex-row align-center">
             <i
-              :class="[
-                'ico',
-                (route.meta && route.meta.icon) || 'el-icon-s-order',
-              ]"
+              v-if="route.meta && route.meta.icon"
+              class="ion ico"
+              v-html="route.meta && route.meta.icon"
             >
             </i>
-            <span slot="title">
+            <span>
               {{ (route.meta && route.meta.title) || route.name }}
             </span>
           </div>
-          <template v-for="(child, ci) in route.children">
-            <!-- 三层 -->
-            <el-menu-item-group
-              v-if="child.children && child.children.length"
-              :route="child"
-              :index="child.name"
-              :key="'child' + ci"
+        </template>
+        <template v-for="(child, ci) in route.children">
+          <!-- 三层 -->
+          <el-menu-item-group
+            v-if="child.children && child.children.length"
+            :route="child"
+            :index="child.name"
+            :key="'child' + ci"
+          >
+            <template #title>
+              {{ (child.meta && child.meta.title) || child.name }}
+            </template>
+            <el-menu-item
+              v-for="(grandson, grandsonindex) in child.children"
+              :route="grandson"
+              :index="grandson.name"
+              :key="'grandson' + grandsonindex"
+              class="third"
             >
-              <template slot="title">
-                <span>
-                  {{ (child.meta && child.meta.title) || child.name }}
-                </span>
-              </template>
-              <el-menu-item
-                v-for="(grandson, grandsonindex) in child.children"
-                :route="grandson"
-                :index="grandson.name"
-                :key="'grandson' + grandsonindex"
-                class="third"
-              >
-                <span slot="title" class="flex-row align-center">
+              <template #title>
+                <span class="flex-row align-center">
                   {{ (grandson.meta && grandson.meta.title) || grandson.name }}
                 </span>
-              </el-menu-item>
-            </el-menu-item-group>
-            <!-- 两层 -->
-            <el-menu-item
-              v-else
-              :route="child"
-              :index="child.name"
-              :key="'child' + ci"
-              class="second"
-            >
-              <span slot="title" class="flex-row align-center">
+              </template>
+            </el-menu-item>
+          </el-menu-item-group>
+          <!-- 两层 -->
+          <el-menu-item
+            v-else
+            :route="child"
+            :index="child.name"
+            class="second"
+          >
+            <template #title>
+              <span class="flex-row align-center">
                 {{ (child.meta && child.meta.title) || child.name }}
               </span>
-            </el-menu-item>
-          </template>
-        </el-submenu>
-        <!-- 一层 -->
-        <el-menu-item
-          v-else
-          :route="route"
-          :index="route.name"
-          :key="'nav' + index"
-          class="flex-row align-center one"
+            </template>
+          </el-menu-item>
+        </template>
+      </el-sub-menu>
+      <!-- 一层 -->
+      <el-menu-item
+        v-else
+        :route="route"
+        :index="route.name"
+        class="flex-row align-center one"
+      >
+        <i
+          v-if="route.meta && route.meta.icon"
+          class="ion ico"
+          v-html="route.meta && route.meta.icon"
         >
-          <i
-            :class="[
-              'ico',
-              (route.meta && route.meta.icon) || 'el-icon-s-order',
-            ]"
-          >
-          </i>
-          <span slot="title">
-            {{ (route.meta && route.meta.title) || route.name }}
-          </span>
-        </el-menu-item>
-      </template>
-    </el-menu>
-  </div>
+        </i>
+        <template #title>
+          {{ (route.meta && route.meta.title) || route.name }}
+        </template>
+      </el-menu-item>
+    </template>
+  </el-menu>
 </template>
 
 <script>
@@ -89,7 +93,7 @@ import { deepcopy } from "@/core";
 // 过滤隐藏路由，扩展fullPath
 let filterRoutes = function (routeArray, base) {
   const array = routeArray.filter((e) => !e.meta || !e.meta.hide);
-  return array.map(item => {
+  return array.map((item) => {
     const route = deepcopy(item);
     let pathKey =
       route.path.indexOf("/") === 0
@@ -113,8 +117,8 @@ export default {
     subMenu: {
       type: Boolean,
       required: false,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -139,8 +143,8 @@ export default {
   watch: {
     $route: {
       handler(newRoute) {
-        if(!this.subMenu){
-          return null
+        if (!this.subMenu) {
+          return null;
         }
         let targetIndex = -1;
         if (Array.isArray(this.list)) {
@@ -172,11 +176,11 @@ export default {
       immediate: true,
     },
   },
-  created(){
-    if(!this.subMenu){
-      this.list=this.menu
+  created() {
+    if (!this.subMenu) {
+      this.list = this.menu;
     }
-  }
+  },
 };
 </script>
 
@@ -186,54 +190,5 @@ export default {
   padding: 10px;
   box-sizing: border-box;
   background: #f5f6f7;
-}
-.custom-menu >>> .el-menu {
-  border-right: 0;
-  background: transparent;
-}
-.custom-menu >>> .ico {
-  font-size: 1.3em;
-  display: inline-block;
-  margin-right: 8px;
-}
-.custom-menu >>> .el-menu-item,
-.custom-menu >>> .el-submenu__title {
-  min-width: 100px;
-  height: 40px;
-  line-height: 40px;
-  border-radius: 6px;
-  color: #555;
-}
-.custom-menu li {
-  margin-top: 2px;
-}
-
-.custom-menu >>> .second {
-  padding-left: 40px;
-  padding-right: 0;
-  box-sizing: border-box;
-  color: #555;
-  border-radius: 6px;
-}
-
-.custom-menu >>> .is-active {
-  color: #0265ed;
-  background: #e6ecf8;
-}
-.custom-menu >>> .el-menu-item:hover {
-  background: #e6ecf8;
-}
-.custom-menu >>> .el-menu-item-group__title {
-  color: rgba(52, 104, 248, 0.8);
-  padding: 12px 0;
-}
-.custom-menu ul > li:last-child {
-  margin-bottom: 0;
-}
-.custom-menu >>> .el-submenu .el-menu {
-  padding: 0 20px;
-}
-.custom-menu >>> .el-submenu.is-active.is-opened {
-  background: transparent;
 }
 </style>

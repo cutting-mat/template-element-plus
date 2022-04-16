@@ -1,21 +1,25 @@
 <template>
-  <el-radio-group v-bind="$attrs" v-model="bindValue" @change="$emit('change', $event)">
-    <el-radio :label="null" v-if="nullAble">{{ $attrs.placeholder || '全部' }}</el-radio>
-    <el-radio v-for="item in list" :key="item.value" :label="item[valueKey]">{{ item[labelKey] }}</el-radio>
+  <el-radio-group
+    v-bind="$attrs"
+    v-model="bindValue"
+    @change="$emit('update:modelValue', $event)"
+  >
+    <el-radio :label="null" v-if="nullAble">{{
+      $attrs.placeholder || "全部"
+    }}</el-radio>
+    <el-radio v-for="item in list" :key="item.value" :label="item[valueKey]">{{
+      item[labelKey]
+    }}</el-radio>
   </el-radio-group>
 </template>
 
 <script>
-import Vue from "vue";
-import { getDefaultValue } from "../assets/util";
+import { mixin } from "../assets/util";
 
 export default {
-  model: {
-    prop: "value",
-    event: "change",
-  },
+  mixins: [mixin],
   props: {
-    value: {
+    modelValue: {
       type: [String, Number],
       required: false,
     },
@@ -23,46 +27,39 @@ export default {
       type: String,
       required: false,
       default() {
-        return getDefaultValue("valueKey", "value")
-      }
+        return "value";
+      },
     },
     labelKey: {
       type: String,
       required: false,
       default() {
-        return getDefaultValue("labelKey", "label")
-      }
+        return "label";
+      },
     },
     nullAble: {
       type: Boolean,
       required: false,
       default() {
-        return getDefaultValue("nullAble", true)
-      }
+        return true;
+      },
     },
     request: {
       type: Function,
-      required: false
+      required: false,
     },
     param: {
       type: String,
       required: false,
       default() {
-        return getDefaultValue("param", undefined)
-      }
+        return undefined;
+      },
     },
     responseTransfer: {
       type: Function,
       required: false,
       default(response) {
-        if (
-          Vue.$DictControl &&
-          typeof Vue.$DictControl.responseTransfer === "function"
-        ) {
-          return Vue.$DictControl.responseTransfer(response);
-        } else {
-          return response;
-        }
+        return response;
       },
     },
   },
@@ -73,10 +70,10 @@ export default {
     };
   },
   watch: {
-    value: {
+    modelValue: {
       handler() {
-        if (this.value) {
-          this.bindValue = this.value;
+        if (this.modelValue) {
+          this.bindValue = this.modelValue;
         }
       },
       immediate: true,
@@ -85,8 +82,8 @@ export default {
   methods: {
     fetchData: async function () {
       if (
-        !Vue.$DictControl &&
-        !Vue.$DictControl.request &&
+        !this.$DictcontrolOption &&
+        !this.$DictcontrolOption.request &&
         !this.request
       ) {
         return console.warn(
@@ -94,8 +91,7 @@ export default {
         );
       }
 
-      const DataRequest =
-        this.request || Vue.$DictControl.request;
+      const DataRequest = this.request || this.$DictcontrolOption.request;
       if (typeof DataRequest !== "function") {
         return console.warn("DictControl: [request] must be a Function!");
       }
@@ -108,5 +104,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

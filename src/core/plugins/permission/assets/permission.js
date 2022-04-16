@@ -6,7 +6,7 @@ import { GetAccountToken, SetAccountToken, GetTokenFromLogin, AuthFailedCallback
 let routeAuthWhiteList;
 
 export default {
-    install: function (Vue, config) {
+    install: function (app, config) {
         // 路由访问免登录白名单
         routeAuthWhiteList = BypassRoute.map((e) => e.path);
 
@@ -18,7 +18,7 @@ export default {
                 config.routeInstance.addRoute(route)
             })
             config.routeInstance.addRoute({
-                path: "*",
+                path: "/:pathMatch(.*)",
                 redirect: "/404",
             });
         }
@@ -36,7 +36,7 @@ export default {
             next()
         })
 
-        Vue.prototype.$Permission = function (loginCallback) {
+        app.config.globalProperties.$Permission = function (loginCallback) {
             const checkAccount = (loginPayload) => {
                 const userToken = GetAccountToken();
                 if (userToken) {
@@ -49,7 +49,7 @@ export default {
                             console.log("Token 已自动续期");
                         }
                         if (config.AccessControl) {
-                            resolve(AccessControl(Vue, config.routeInstance, config.interceptorsRequest))
+                            resolve(AccessControl(app, config.routeInstance, config.interceptorsRequest))
                         } else {
                             resolve()
                         }
@@ -67,7 +67,6 @@ export default {
                  * 监听 "login" 事件
                  */
                 const userToken = GetTokenFromLogin(res);
-
                 if (userToken) {
                     SetAccountToken(userToken)
                     checkAccount(res)
@@ -85,7 +84,7 @@ export default {
 
                 if (
                     routeAuthWhiteList.indexOf(
-                        "/" + this.$router.currentRoute.path.split("/")[1]
+                        "/" + this.$router.currentRoute.value.path.split("/")[1]
                     ) === -1
                 ) {
                     // 非白名单路由刷新, 触发路由守卫的未登录逻辑

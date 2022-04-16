@@ -7,43 +7,39 @@
       value: this.valueKey,
       label: this.labelKey,
     }"
-    @change="$emit('change', $event)"
+    @change="$emit('update:modelValue', $event)"
   ></el-cascader>
 </template>
 
 <script>
-import Vue from "vue";
-import { getDefaultValue } from "../assets/util";
+import { mixin } from "../assets/util";
 
 export default {
-  model: {
-    prop: "value",
-    event: "change",
-  },
+  mixins: [mixin],
   props: {
-    value: {
-      type: Array,
+    modelValue: {
+      type: [String, Number],
       required: false,
     },
     valueKey: {
       type: String,
       required: false,
       default() {
-        return getDefaultValue("valueKey", "value");
+        return "value";
       },
     },
     labelKey: {
       type: String,
       required: false,
       default() {
-        return getDefaultValue("labelKey", "label");
+        return "label";
       },
     },
     nullAble: {
       type: Boolean,
       required: false,
       default() {
-        return getDefaultValue("nullAble", true);
+        return true;
       },
     },
     request: {
@@ -54,21 +50,14 @@ export default {
       type: String,
       required: false,
       default() {
-        return getDefaultValue("param", undefined);
+        return undefined;
       },
     },
     responseTransfer: {
       type: Function,
       required: false,
       default(response) {
-        if (
-          Vue.$DictControl &&
-          typeof Vue.$DictControl.responseTransfer === "function"
-        ) {
-          return Vue.$DictControl.responseTransfer(response);
-        } else {
-          return response;
-        }
+        return response;
       },
     },
   },
@@ -79,10 +68,10 @@ export default {
     };
   },
   watch: {
-    value: {
+    modelValue: {
       handler() {
-        if (this.value) {
-          this.bindValue = this.value;
+        if (this.modelValue) {
+          this.bindValue = this.modelValue;
         }
       },
       immediate: true,
@@ -90,13 +79,17 @@ export default {
   },
   methods: {
     fetchData: async function () {
-      if (!Vue.$DictControl && !Vue.$DictControl.request && !this.request) {
+      if (
+        !this.$DictcontrolOption &&
+        !this.$DictcontrolOption.request &&
+        !this.request
+      ) {
         return console.warn(
           "DictControl: The required configuration [request] is missing!"
         );
       }
 
-      const DataRequest = this.request || Vue.$DictControl.request;
+      const DataRequest = this.request || this.$DictcontrolOption.request;
       if (typeof DataRequest !== "function") {
         return console.warn("DictControl: [request] must be a Function!");
       }

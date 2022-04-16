@@ -197,7 +197,7 @@ export default function (Vue, routeInstance, interceptorsRequest) {
 
             // v-auth 指令
             Vue.directive('auth', {
-                inserted: function (el, binding) {
+                mounted: function (el, binding) {
                     if (Vue.prototype.$_auth && !Vue.prototype.$_auth(binding.value)) {
                         el.parentNode.removeChild(el);
                     }

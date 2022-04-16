@@ -4,14 +4,14 @@
       <el-button
         v-auth="account.add"
         type="primary"
-        size="small"
-        icon="el-icon-plus"
         @click="dialogVisible = true"
-        >添加</el-button
       >
+        <el-icon><plus /></el-icon>
+        添加
+      </el-button>
     </ToolBar>
     <!-- search -->
-    <el-form ref="searchForm" inline :model="queryParam" size="small">
+    <el-form ref="searchForm" inline :model="queryParam">
       <el-form-item label="账号">
         <el-input v-model="queryParam.accountNumber"></el-input>
       </el-form-item>
@@ -19,17 +19,19 @@
         <el-input v-model="queryParam.accountName"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="fetchData(true)"
-          >查询</el-button
-        >
-        <el-button icon="el-icon-refresh" @click="resetSearch()"
-          >重置</el-button
-        >
+        <el-button type="primary" @click="fetchData(true)">
+          <el-icon><search /></el-icon>
+          查询
+        </el-button>
+        <el-button @click="resetSearch()">
+          <el-icon><refresh /></el-icon>
+          重置
+        </el-button>
       </el-form-item>
     </el-form>
     <!-- list -->
     <p>
-      <i class="el-icon-info"></i> 共
+      <el-icon><info-filled /></el-icon> 共
       <el-button type="text">{{ totalCount }}</el-button> 条记录
     </p>
     <el-table :data="list">
@@ -49,7 +51,7 @@
         align="center"
       ></el-table-column>
       <el-table-column label="状态" width="80" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <template v-if="!scope.row.state">
             <span style="color: #ff4949">已禁用</span>
           </template>
@@ -59,13 +61,12 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" width="300" align="center">
-        <template slot-scope="scope">
-          <el-button v-auth="account.edit" size="mini" @click="edit(scope.row)"
+        <template #default="scope">
+          <el-button v-auth="account.edit" @click="edit(scope.row)"
             >编辑</el-button
           >
           <el-button
             v-auth="account.resetPassword"
-            size="mini"
             type="warning"
             plain
             @click="resetPassword(scope.row)"
@@ -73,7 +74,6 @@
           >
           <el-button
             v-auth="account.remove"
-            size="mini"
             type="danger"
             plain
             @click="remove(scope.row)"
@@ -99,15 +99,14 @@
     />
     <!-- 弹窗 -->
     <el-dialog
-      class="userEditDialog"
+      custom-class="userEditDialog"
       :close-on-click-modal="false"
       title="账号信息"
-      :visible="dialogVisible"
+      v-model="dialogVisible"
       width="600px"
       @close="handleCloseDialog"
     >
       <el-form
-        size="small"
         ref="editForm"
         :rules="rules"
         :model="editForm"
@@ -117,12 +116,12 @@
           <uploader
             class="upload_avatar"
             accept="t-image"
-            :value="editForm.avatar ? [{ url: editForm.avatar }] : []"
+            :modelValue="editForm.avatar ? [{ url: editForm.avatar }] : []"
             imgCrop
             :show-file-list="false"
             :on-success="
               (res) => {
-                $set(editForm, 'avatar', res.url);
+                editForm.avatar = res.url;
               }
             "
           >
@@ -181,10 +180,12 @@
           ></el-switch>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="save">确 定</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
-      </span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="save">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -193,10 +194,13 @@
 import { deepcopy } from "@/core";
 import * as account from "../api/account";
 import { list as requestRoles } from "../api/role";
+import { defineAsyncComponent } from "vue";
 
 export default {
   components: {
-    OrgPicker: () => import("../components/OrgPicker.vue"),
+    OrgPicker: defineAsyncComponent(() =>
+      import("../components/OrgPicker.vue")
+    ),
   },
   data() {
     const validatePass = (rule, value, callback) => {
@@ -412,7 +416,7 @@ export default {
 </script>
 
 <style scoped>
-.userEditDialog >>> .upload_avatar {
+.upload_avatar {
   display: block;
   width: 120px;
   height: 120px;
@@ -420,7 +424,7 @@ export default {
   background: #dedede;
   text-align: center;
 }
-.userEditDialog >>> .upload_avatar img {
+.upload_avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;

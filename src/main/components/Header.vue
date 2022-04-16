@@ -20,15 +20,16 @@
       @command="handleCommand"
     >
       <span class="el-dropdown-link">
-        <el-avatar icon="el-icon-user-solid"></el-avatar>
+        <el-avatar icon="UserFilled"></el-avatar>
         <span class="accountName">{{ user.accountName }}</span>
-        <i class="el-icon-caret-bottom"></i>
+        <el-icon><caret-bottom /></el-icon>
       </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
-        <el-dropdown-item command="logout">退出登录</el-dropdown-item>
-        
-      </el-dropdown-menu>
+      <template #dropdown>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
+          <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
     </el-dropdown>
   </header>
 </template>
@@ -39,19 +40,19 @@ import { event } from "@/core";
 export default {
   data() {
     return {
-      list: []
+      list: [],
     };
   },
   computed: {
-    user(){
-      return this.$store.state.user
-    }
+    user() {
+      return this.$store.state.user;
+    },
   },
   methods: {
     handleCommand: function (command) {
       switch (command) {
         case "userInfo":
-          this.$router.push({name: "个人信息"})
+          this.$router.push({ name: "个人信息" });
           break;
         case "logout":
           this.logout();
@@ -70,7 +71,7 @@ export default {
         event.emit("logout");
       });
     },
-  }
+  },
 };
 </script>
 

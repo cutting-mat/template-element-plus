@@ -10,74 +10,67 @@
     check-strictly
     @check-change="handleCheckChange"
   >
-    <div slot-scope="{ node, data }" class="custom-tree-item">
-      <div class="flex-1 extendLable">
-        <span v-if="data.type === 1" style="color: #67c23a">
-          <i class="el-icon-medal"></i>
+    <template #default="{ node, data }">
+      <div class="custom-tree-item">
+        <div class="flex-1 extendLable">
+          <span v-if="data.type === 1" style="color: #67c23a">
+            <el-icon><medal /></el-icon>
+          </span>
+          <span style="margin-right: 20px" :class="{ source: data.type === 1 }">
+            {{ data.name }}
+          </span>
+          <el-tag v-if="data.type === 1" :type="typeColor[data.method]">
+            <el-icon><position /></el-icon>
+            {{ data.method.toUpperCase() }}
+          </el-tag>
+          <el-tag type="info">
+            <el-icon v-if="data.type === 0"><link /></el-icon>
+            {{ data.type === 0 ? data.route : data.url }}
+          </el-tag>
+        </div>
+        <span class="extendGroup" v-if="!picker">
+          <!-- 根据 data.type===0 / 1 判断是路由还是请求 -->
+          <el-button
+            v-auth="resource.edit"
+            type="text"
+            @click.stop="$emit('edit', data)"
+          >
+            编辑
+          </el-button>
+          <el-button
+            v-auth="resource.add"
+            v-if="data.type === 0"
+            type="text"
+            @click.stop="$emit('append', data)"
+          >
+            添加子菜单
+          </el-button>
+          <el-button
+            v-auth="resource.add"
+            v-if="data.type === 0"
+            type="text"
+            @click.stop="$emit('add-resource', data)"
+          >
+            添加资源
+          </el-button>
+          <el-button
+            v-auth="resource.remove"
+            type="text"
+            @click.stop="$emit('remove', data)"
+          >
+            删除
+          </el-button>
         </span>
-        <span style="margin-right: 20px" :class="{ source: data.type === 1 }">
-          {{ data.name }}
+        <span class="extendGroup" v-else>
+          <el-button
+            type="text"
+            @click.stop="handleCheckChange(data, !node.checked, true)"
+          >
+            批量选择
+          </el-button>
         </span>
-        <el-tag
-          v-if="data.type === 1"
-          size="mini"
-          :type="typeColor[data.method]"
-        >
-          <i class="el-icon-position"></i>
-          {{ data.method.toUpperCase() }}
-        </el-tag>
-        <el-tag size="mini" type="info">
-          <i v-if="data.type === 0" class="el-icon-link"></i>
-          {{ data.type === 0 ? data.route : data.url }}
-        </el-tag>
       </div>
-      <span class="extendGroup" v-if="!picker">
-        <!-- 根据 data.type===0 / 1 判断是路由还是请求 -->
-        <el-button
-          v-auth="resource.edit"
-          size="small"
-          type="text"
-          @click.stop="$emit('edit', data)"
-        >
-          编辑
-        </el-button>
-        <el-button
-          v-auth="resource.add"
-          v-if="data.type === 0"
-          size="small"
-          type="text"
-          @click.stop="$emit('append', data)"
-        >
-          添加子菜单
-        </el-button>
-        <el-button
-          v-auth="resource.add"
-          v-if="data.type === 0"
-          size="small"
-          type="text"
-          @click.stop="$emit('add-resource', data)"
-        >
-          添加资源
-        </el-button>
-        <el-button
-          v-auth="resource.remove"
-          size="small"
-          type="text"
-          @click.stop="$emit('remove', data)"
-        >
-          删除
-        </el-button>
-      </span>
-      <span class="extendGroup" v-else>
-        <el-button
-          size="small"
-          type="text"
-          @click.stop="handleCheckChange(data, !node.checked, true)"
-        >
-          批量选择
-        </el-button>
-      </span>
-    </div>
+    </template>
   </el-tree>
 </template>
 
@@ -86,17 +79,13 @@ import { throttle, buildTree } from "@/core";
 import * as resource from "../api/resource";
 
 export default {
-  model: {
-    prop: "value",
-    event: "change",
-  },
   props: {
     picker: {
       type: Boolean,
       required: false,
       default: false,
     },
-    value: {
+    modelValue: {
       type: Array,
       required: false,
     },
@@ -131,10 +120,10 @@ export default {
       },
       immediate: true,
     },
-    value: {
+    modelValue: {
       handler: function () {
-        if (Array.isArray(this.value)) {
-          this.$refs.tree.setCheckedKeys(this.value);
+        if (Array.isArray(this.modelValue)) {
+          this.$refs.tree.setCheckedKeys(this.modelValue);
         }
       },
       deep: true,
@@ -168,9 +157,9 @@ export default {
           userPermissions.menus.concat(userPermissions.resources)
         );
         //设置已勾选
-        if (Array.isArray(this.value)) {
+        if (Array.isArray(this.modelValue)) {
           this.$nextTick(() => {
-            this.$refs.tree.setCheckedKeys(this.value);
+            this.$refs.tree.setCheckedKeys(this.modelValue);
           });
         }
       });
@@ -186,7 +175,7 @@ export default {
     this.trigger = throttle(() => {
       const checked = this.$refs.tree.getCheckedNodes();
       this.$emit(
-        "change",
+        "updaate:modelValue",
         checked.map((e) => e.id)
       );
     });
@@ -210,7 +199,7 @@ export default {
   color: #999;
   font-size: 14px;
 }
-.custom-tree >>> .el-tree-node__content {
+.custom-tree :deep(.el-tree-node__content) {
   height: 32px;
   line-height: 32px;
 }

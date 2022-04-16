@@ -11,8 +11,9 @@
       <el-input
         v-model="formData.password"
         placeholder="请输入当前登录密码"
-        prefix-icon="el-icon-lock"
+        prefix-icon="lock"
         show-password
+        size="large"
       ></el-input>
     </el-form-item>
     <el-form-item>
@@ -21,8 +22,10 @@
         type="primary"
         style="width: 100%"
         @click="handleSubmit"
-        >立即验证</el-button
+        size="large"
       >
+        立即验证
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -47,8 +50,8 @@ export default {
   },
   methods: {
     handleSubmit() {
-      this.$refs.form.validateField("password", (err) => {
-        if (!err) {
+      this.$refs.form.validateField("password", (valid) => {
+        if (valid) {
           this.loading = true;
 
           validPassword({

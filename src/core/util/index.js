@@ -6,7 +6,7 @@
  * */
 const STORAGE_SPACE = '';           // 指定命名空间, 防止同域子项目间存储混淆
 export const storage = function (key, value, storageFun = localStorage) {
-    key = `${STORAGE_SPACE || process.env.BASE_URL}_${key}`;
+    key = `${STORAGE_SPACE || import.meta.env.BASE_URL}_${key}`;
     if (value === void (0)) {
         // get
         let lsVal = storageFun.getItem(key);

@@ -1,5 +1,6 @@
 // 组件库按需引入
 import {
+    ElIcon,
     ElLoading,
     ElPagination,
     ElDialog,
@@ -7,7 +8,6 @@ import {
     ElDropdownMenu,
     ElDropdownItem,
     ElMenu,
-    ElSubMenu,
     ElMenuItem,
     ElMenuItemGroup,
     ElInput,
@@ -89,6 +89,7 @@ import {
 } from 'element-plus';
 
 const components = [
+    ElIcon,
     ElLoading,
     ElPagination,
     ElDialog,
@@ -96,7 +97,6 @@ const components = [
     ElDropdownMenu,
     ElDropdownItem,
     ElMenu,
-    ElSubMenu,
     ElMenuItem,
     ElMenuItemGroup,
     ElInput,

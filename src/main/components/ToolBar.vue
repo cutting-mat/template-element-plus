@@ -1,9 +1,9 @@
 <template>
   <div class="flex-row align-center toolBar">
-    <span class="_back" title="返回" @click="back()">
-      <i class="el-icon-back"></i>
+    <span class="_back" title="返回" @click="propsFinnal.back()">
+      <el-icon><arrow-left /></el-icon>
     </span>
-    <div class="flex-1 _title">{{ title }}</div>
+    <div class="flex-1 _title">{{ propsFinnal.title }}</div>
     <slot />
   </div>
 </template>
@@ -14,16 +14,21 @@ export default {
     title: {
       type: String,
       required: false,
-      default() {
-        return (this.$route.meta && this.$route.meta.title) || this.$route.name;
-      },
     },
     back: {
       type: Function,
       required: false,
-      default() {
-        this.$router.go(-1);
-      },
+    },
+  },
+  computed: {
+    propsFinnal() {
+      return {
+        title:
+          this.$props.title ||
+          (this.$route.meta && this.$route.meta.title) ||
+          this.$route.name,
+        back: this.$props.back || (() => this.$router.go(-1)),
+      };
     },
   },
 };
@@ -40,6 +45,7 @@ export default {
   border-bottom: 1px solid #d8dee4;
 }
 .toolBar ._back {
+  display: inherit;
   font-size: 20px;
   cursor: pointer;
   color: #333;

@@ -8,7 +8,7 @@
       :maxlength="maxlength"
       :minlength="minlength"
       :suffix-icon="suffixIcon"
-      :prefix-icon="prefixIcon"
+      prefix-icon="prefixIcon"
       :autocomplete="autocomplete"
       :show-password="showPassword"
       :disabled="disabled"
@@ -37,10 +37,6 @@ import { checkPassword } from "./assets/checkpassword";
 
 export default {
   name: "input-password",
-  model: {
-    prop: "value",
-    event: "change",
-  },
   props: {
     name: {
       type: String,
@@ -221,7 +217,7 @@ export default {
   flex: 1;
   min-width: 0;
 }
-.input-password >>> .el-input-group__append {
+.input-password :deep(.el-input-group__append) {
   background: #fcfcfc;
   padding: 0 12px;
 }

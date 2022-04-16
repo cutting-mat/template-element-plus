@@ -1,14 +1,22 @@
-import Vue from "vue";
 /**
- * 预先从全局用户配置中获取props默认值
- * @param key[String] prop的key
- * @param defaultValue[Any] 组件内置默认值
- * return[Any] props.key的最终默认值
+ * 混合全局用户配置与props默认值
+
  */
-export const getDefaultValue = function (key, defaultValue) {
-    const globalOption = Vue.$DictControl;
-    if (Object.keys(globalOption).indexOf(key) !== -1) {
-        return globalOption[key];
+
+export const mixin = {
+    computed: {
+        propsFinnal() {
+            const getDefaultValue = (key) => {
+                if (Object.keys(this.$DictcontrolOption).indexOf(key) !== -1) {
+                    return this.$DictcontrolOption[key];
+                }
+                return this.$props[key];
+            };
+            let result = {};
+            Object.keys(this.$props).forEach((prop) => {
+                result[prop] = getDefaultValue(prop);
+            });
+            return result;
+        }
     }
-    return defaultValue;
-};
+}

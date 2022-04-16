@@ -5,10 +5,9 @@
         v-if="!picker"
         v-auth="dict.add"
         type="primary"
-        size="small"
-        icon="el-icon-plus"
         @click="dialogVisible = true"
       >
+        <el-icon><plus /></el-icon>
         添加
       </el-button>
     </ToolBar>
@@ -16,14 +15,14 @@
     <!-- list -->
     <el-table :data="list" style="width: 100%" @row-click="handleRowClick">
       <el-table-column label="选择" width="50" align="center" v-if="picker">
-        <template slot-scope="scope">
-          <i
-            class="el-icon-success"
+        <template #default="scope">
+          <el-icon
             :class="{
               checkIcon: true,
               checked: scope.row.dictCode === currentChecked.dictCode,
             }"
-          ></i>
+            ><success-filled
+          /></el-icon>
         </template>
       </el-table-column>
       <el-table-column v-else type="index" width="50"> </el-table-column>
@@ -43,13 +42,12 @@
         align="center"
       ></el-table-column>
       <el-table-column label="操作" width="300" align="center" v-if="!picker">
-        <template slot-scope="scope">
-          <el-button v-auth="dict.edit" size="mini" @click="edit(scope.row)"
+        <template #default="scope">
+          <el-button v-auth="dict.edit" @click="edit(scope.row)"
             >编辑</el-button
           >
           <el-button
             v-auth="dict.itemEdit"
-            size="mini"
             type="warning"
             plain
             @click="editItem(scope.row)"
@@ -57,7 +55,6 @@
           >
           <el-button
             v-auth="dict.remove"
-            size="mini"
             type="danger"
             plain
             @click="remove(scope.row)"
@@ -78,12 +75,11 @@
     <el-dialog
       :close-on-click-modal="false"
       title="字典信息"
-      :visible="dialogVisible"
+      v-model="dialogVisible"
       width="600px"
       @close="handleCloseDialog"
     >
       <el-form
-        size="small"
         ref="editForm"
         :rules="rules"
         :model="editForm"
@@ -102,14 +98,16 @@
           <el-input v-model="editForm.remark"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="save">确 定</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
-      </span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="save">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!-- 数据维护 -->
     <DictEditer
-      :visible="editerVisible"
+      v-model="editerVisible"
       :dict-code="editForm.dictCode"
       @close="editerVisible = false"
     />
@@ -119,6 +117,7 @@
 <script>
 import { deepcopy } from "@/core";
 import * as dict from "../api/dict";
+import { defineAsyncComponent } from "vue";
 
 export default {
   props: {
@@ -136,7 +135,9 @@ export default {
     },
   },
   components: {
-    DictEditer: () => import("../components/DictEditer"),
+    DictEditer: defineAsyncComponent(() =>
+      import("../components/DictEditer.vue")
+    ),
   },
   data() {
     return {

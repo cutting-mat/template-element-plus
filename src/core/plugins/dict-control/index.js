@@ -6,18 +6,19 @@
  * 全局组件<DictRadio>
  * 全局组件<DictSelect>
  * */
+import { defineAsyncComponent } from "vue";
 
 const components = {
-    DictCascader: () => import("./components/DictCascader.vue"),
-    DictCheckbox: () => import("./components/DictCheckbox.vue"),
-    DictRadio: () => import("./components/DictRadio.vue"),
-    DictSelect: () => import("./components/DictSelect.vue"),
+    DictCascader: defineAsyncComponent(() => import("./components/DictCascader.vue")),
+    DictCheckbox: defineAsyncComponent(() => import("./components/DictCheckbox.vue")),
+    DictRadio: defineAsyncComponent(() => import("./components/DictRadio.vue")),
+    DictSelect: defineAsyncComponent(() => import("./components/DictSelect.vue")),
 }
-export const install = function (Vue, option) {
-    Vue.$DictControl = option || {};
+export const install = function (app, option) {
+    app.config.globalProperties.$DictcontrolOption = option || {};
 
     for (let name in components) {
-        Vue.component(name, components[name])
+        app.component(name, components[name])
     }
 }
 

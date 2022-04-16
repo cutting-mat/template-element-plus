@@ -15,7 +15,7 @@
     <!-- 其他操作按钮 -->
     <el-dropdown @command="handleTags">
       <el-button type="text">
-        <i class="el-icon-arrow-down"></i>
+        <el-icon><arrow-down-bold /></el-icon>
       </el-button>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="other">关闭其他</el-dropdown-item>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
