@@ -12,7 +12,7 @@ export default defineConfig({
     alias: [{ find: '@', replacement: resolve(__dirname, 'src') }]
   },
   base: process.env.NODE_ENV === 'production'
-    ? '/'     // 生产环境构建路径
+    ? '/template-element-plus/'     // 生产环境构建路径
     : '/',
   build: {
     outDir: 'dist'

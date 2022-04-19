@@ -1,3 +1,7 @@
+// 开启 mock
+import mocker from '../mock';
+mocker()
+
 import { createApp } from 'vue'
 
 // 加载根组件
