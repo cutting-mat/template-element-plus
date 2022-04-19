@@ -2,7 +2,7 @@
 
 [![license](https://img.shields.io/github/license/cutting-mat/template-element-plus.svg)]()
 
-基于 Element-UI 的 PC 端项目脚手架
+基于 [Element-Plus](https://element-plus.gitee.io/zh-CN/guide/quickstart.html) 的 PC 端项目脚手架
 
 - [x] 模块化目录结构
 - [x] 内置请求缓存方案
