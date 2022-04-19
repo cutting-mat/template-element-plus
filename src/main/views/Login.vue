@@ -33,11 +33,7 @@
           <inputCapthaImage ref="validCode" />
         </el-form-item>
         <div>
-          <el-checkbox
-            :value="$store.state.rememberLogin"
-            @change="$store.set('rememberLogin', $event)"
-            >记住我</el-checkbox
-          >
+          <el-checkbox v-model="$store.state.rememberLogin">记住我</el-checkbox>
         </div>
         <el-form-item class="submit-item">
           <el-button
@@ -161,6 +157,7 @@ export default {
 
 <style scoped>
 .loginPage {
+  height: 100%;
   background: url(../assets/img/b.jpg) center no-repeat;
   background-size: cover;
 }

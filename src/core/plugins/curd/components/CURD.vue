@@ -72,11 +72,7 @@
       >
       </el-table-column>
       <!-- 列循环 -->
-      <CURDColumn
-        v-for="(column, index) in columnsData"
-        :key="'col' + index"
-        :column="column"
-      >
+      <CURDColumn v-for="(column, index) in columnsData" :column="column">
         <template
           v-for="slotName in Object.keys($scopedSlots)"
           :slot="slotName"
@@ -243,8 +239,8 @@ export default {
     },
   },
   components: {
-    CURDForm: () => import("./CURDForm"),
-    CURDColumn: () => import("./CURDColumn"),
+    CURDForm: () => import("./CURDForm.vue"),
+    CURDColumn: () => import("./CURDColumn.vue"),
   },
   data() {
     return {

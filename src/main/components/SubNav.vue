@@ -11,7 +11,6 @@
         v-if="route.children && route.children.length"
         :route="route"
         :index="route.name"
-        :key="'nav' + index"
       >
         <template #title>
           <div class="first flex-row align-center">
@@ -32,7 +31,6 @@
             v-if="child.children && child.children.length"
             :route="child"
             :index="child.name"
-            :key="'child' + ci"
           >
             <template #title>
               {{ (child.meta && child.meta.title) || child.name }}
@@ -41,7 +39,6 @@
               v-for="(grandson, grandsonindex) in child.children"
               :route="grandson"
               :index="grandson.name"
-              :key="'grandson' + grandsonindex"
               class="third"
             >
               <template #title>

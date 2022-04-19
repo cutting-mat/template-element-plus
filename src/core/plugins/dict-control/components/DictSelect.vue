@@ -11,7 +11,6 @@
     ></el-option>
     <el-option
       v-for="item in list"
-      :key="item.value"
       :label="item[labelKey]"
       :value="item[valueKey]"
     ></el-option>

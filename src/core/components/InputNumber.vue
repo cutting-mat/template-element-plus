@@ -1,6 +1,6 @@
 <template>
   <el-input
-    :value="myValue"
+    :modelValue="myValue"
     :placeholder="placeholder"
     :disabled="disabled"
     :size="size"
@@ -22,7 +22,7 @@ export default {
   name: "input-number",
   props: {
     modelValue: {
-      /*外部传值*/
+      /* 外部传值 */
       type: [String, Number],
       required: false,
       default: "",
@@ -38,19 +38,19 @@ export default {
       default: Infinity,
     },
     precision: {
-      /*保留小数位*/
+      /* 保留小数位 */
       type: Number,
       required: false,
       default: 0,
     },
     round: {
-      /*是否四舍五入*/
+      /* 是否四舍五入 */
       type: Boolean,
       required: false,
       default: false,
     },
     zeroFill: {
-      /*是否补零*/
+      /* 是否补零 */
       type: Boolean,
       required: false,
       default: false,

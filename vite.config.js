@@ -11,8 +11,8 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '@', replacement: resolve(__dirname, 'src') }]
   },
-  base: process.env.NODE_ENV === 'production'           // 生产/开发环境构建路径, 默认'/template-element-ui/'
-    ? '/template-element-plus/'
+  base: process.env.NODE_ENV === 'production'
+    ? '/'     // 生产环境构建路径
     : '/',
   build: {
     outDir: 'dist'

@@ -5,7 +5,6 @@
     <ul class="flex-1 navlist">
       <li
         v-for="(item, index) in list"
-        :key="index"
         class="_item"
         @click="$router.push(item)"
       >

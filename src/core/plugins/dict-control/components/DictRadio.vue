@@ -7,7 +7,7 @@
     <el-radio :label="null" v-if="nullAble">{{
       $attrs.placeholder || "全部"
     }}</el-radio>
-    <el-radio v-for="item in list" :key="item.value" :label="item[valueKey]">{{
+    <el-radio v-for="item in list" :label="item[valueKey]">{{
       item[labelKey]
     }}</el-radio>
   </el-radio-group>

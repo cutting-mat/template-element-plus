@@ -26,7 +26,6 @@
           <el-radio-group v-model="editForm.method">
             <el-radio
               v-for="(item, i) in requestMethods"
-              :key="'m' + i"
               :label="item.label.toLowerCase()"
               >{{ item.label }}</el-radio
             >

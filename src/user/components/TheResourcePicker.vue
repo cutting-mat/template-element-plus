@@ -14,17 +14,17 @@
       <div class="custom-tree-item">
         <div class="flex-1 extendLable">
           <span v-if="data.type === 1" style="color: #67c23a">
-            <el-icon><medal /></el-icon>
+            <el-icon><Medal /></el-icon>
           </span>
           <span style="margin-right: 20px" :class="{ source: data.type === 1 }">
             {{ data.name }}
           </span>
           <el-tag v-if="data.type === 1" :type="typeColor[data.method]">
-            <el-icon><position /></el-icon>
+            <el-icon><Position /></el-icon>
             {{ data.method.toUpperCase() }}
           </el-tag>
           <el-tag type="info">
-            <el-icon v-if="data.type === 0"><link /></el-icon>
+            <el-icon v-if="data.type === 0"><Link /></el-icon>
             {{ data.type === 0 ? data.route : data.url }}
           </el-tag>
         </div>

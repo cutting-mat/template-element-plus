@@ -2,13 +2,13 @@
   <div class="input-password">
     <el-input
       :name="name"
-      :value="myValue"
+      :modelValue="myValue"
       :placeholder="placeholder"
       :size="size"
       :maxlength="maxlength"
       :minlength="minlength"
       :suffix-icon="suffixIcon"
-      prefix-icon="prefixIcon"
+      :prefix-icon="prefixIcon"
       :autocomplete="autocomplete"
       :show-password="showPassword"
       :disabled="disabled"
@@ -20,14 +20,14 @@
       @cut.native.capture.prevent="false"
       @input="handleInput"
     >
-      <div slot="append" v-if="myValue">
+      <template #append v-if="myValue">
         <div class="_text" :style="scoreStyle.textStyle">
           {{ format(score) }}
         </div>
         <div class="_progress">
           <div class="_bar" :style="scoreStyle.progressStyle"></div>
         </div>
-      </div>
+      </template>
     </el-input>
   </div>
 </template>
@@ -211,6 +211,7 @@ export default {
 <style scoped>
 .input-password {
   display: flex;
+  width: 100%;
 }
 .input-password .el-input {
   -ms-flex: 1;

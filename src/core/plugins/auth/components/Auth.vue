@@ -19,7 +19,6 @@
       <ul class="flex-row">
         <li
           v-for="(type, index) in otherTypes"
-          :key="index"
           class="flex-1 _item"
           :title="type.title"
           @click="currentAuthType = type"

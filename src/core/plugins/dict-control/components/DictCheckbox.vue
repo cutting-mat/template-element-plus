@@ -4,12 +4,9 @@
     v-bind="$attrs"
     @change="$emit('update:modelValue', $event)"
   >
-    <el-checkbox
-      v-for="item in list"
-      :key="item.value"
-      :label="item[valueKey]"
-      >{{ item[labelKey] }}</el-checkbox
-    >
+    <el-checkbox v-for="item in list" :label="item[valueKey]">{{
+      item[labelKey]
+    }}</el-checkbox>
   </el-checkbox-group>
 </template>
 

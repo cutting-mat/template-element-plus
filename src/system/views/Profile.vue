@@ -6,7 +6,7 @@
       <uploader
         class="upload_avatar"
         accept="t-image"
-        :value="userInfo.avatar ? [{ url: userInfo.avatar }] : []"
+        :modelValue="userInfo.avatar ? [{ url: userInfo.avatar }] : []"
         imgCrop
         :show-file-list="false"
         :on-success="handleUpload"

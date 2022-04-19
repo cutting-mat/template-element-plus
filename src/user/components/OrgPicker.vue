@@ -3,7 +3,7 @@
     <el-input
       :size="size"
       readonly
-      :value="showTitle"
+      :modelValue="showTitle"
       @focus="dialogVisible = true"
       placeholder="请选择"
     ></el-input>
@@ -65,7 +65,7 @@ export default {
     },
   },
   components: {
-    OrgTree: defineAsyncComponent(() => require("../components/OrgTree")),
+    OrgTree: defineAsyncComponent(() => import("../components/OrgTree.vue")),
   },
   data() {
     return {
