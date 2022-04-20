@@ -24,13 +24,13 @@
         placeholder="请输入验证码"
       >
         <template #append>
-          <countdownButton
+          <CountdownButton
             ref="countdownButton"
             :count="30"
             @click="sendValidCode"
           >
             获取验证码
-          </countdownButton>
+          </CountdownButton>
         </template>
       </el-input>
     </el-form-item>
@@ -49,14 +49,20 @@
 
 <script>
 import {
-  mobileValidCode,
+  sendMobileValidCode,
+  sendMobileValidCodeResetPassword,
   validateMobileValidCode,
-  validUserExist,
 } from "@/core/plugins/auth/api/auth";
 
 export default {
+  props: {
+    command: {
+      type: String,
+      required: false,
+    },
+  },
   data() {
-    const validateEmail = (rule, value, callback) => {
+    const validateMobile = (rule, value, callback) => {
       if (!value) {
         callback(new Error("请输入绑定手机"));
       } else {
@@ -65,21 +71,7 @@ export default {
           if (this.userMobile !== value) {
             return callback(new Error("手机号不正确"));
           }
-        } else {
-          // 未登录/无邮箱用户，校验邮箱是否存在
-          return validUserExist({
-            mobile: value,
-          }).then((res) => {
-            if (res.data) {
-              // 保存accountInfo
-              this.accountInfo = res.data;
-              callback();
-            } else {
-              callback(new Error("手机号不存在"));
-            }
-          });
         }
-
         callback();
       }
     };
@@ -92,13 +84,12 @@ export default {
         inputMobile: null,
       },
       rules: {
-        inputMobile: [{ validator: validateEmail, trigger: [] }],
+        inputMobile: [{ validator: validateMobile, trigger: [] }],
         userInput: [
           { required: true, message: "请输入验证码", trigger: "blur" },
           { min: 4, max: 6, message: "请输入正确的验证码", trigger: "blur" },
         ],
       },
-      accountInfo: null, // 用于未登录修改密码
     };
   },
   computed: {
@@ -126,7 +117,12 @@ export default {
       this.$refs.form.validateField("inputMobile", (valid) => {
         if (valid) {
           this.loading = true;
-          mobileValidCode({
+          // 区分忘记密码和修改密码
+          const requestMethod =
+            this.command === "reset-pw"
+              ? sendMobileValidCodeResetPassword
+              : sendMobileValidCode;
+          requestMethod({
             mobile: this.formData.inputMobile,
           })
             .then((res) => {
@@ -153,7 +149,7 @@ export default {
             .then((res) => {
               this.loading = false;
               if (res.status === 200) {
-                this.$emit("success", res.data, this.accountInfo);
+                this.$emit("success", res.data);
               } else {
                 this.$refs.form.resetFields();
                 this.$message.warning(`验证失败`);
@@ -170,21 +166,21 @@ export default {
 </script>
 
 <style scoped>
-.auth_mobile >>> .el-input-group__append {
+.auth_mobile :deep(.el-input-group__append) {
   background-color: #409eff;
   border: 0;
 }
-.auth_mobile >>> .el-input-group__append .el-button {
+.auth_mobile :deep(.el-input-group__append .el-button) {
   border-radius: 0;
   margin: 0 -20px;
 }
-.auth_mobile >>> .el-input-group__append .countdownButton {
+.auth_mobile :deep(.el-input-group__append .countdownButton) {
   color: #fff;
   background-color: #409eff;
   border: 1px solid #409eff;
 }
 
-.auth_mobile >>> .el-input-group__append .el-button.is-disabled {
+.auth_mobile :deep(.el-input-group__append .el-button.is-disabled) {
   background-color: #a0cfff;
   border-color: #a0cfff;
 }

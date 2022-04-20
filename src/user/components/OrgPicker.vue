@@ -46,8 +46,8 @@ export default {
       // 输入框显示适配
       type: Function,
       required: false,
-      default(value, selected) {
-        return selected.name || value;
+      default(value) {
+        return value;
       },
     },
     size: {
@@ -64,12 +64,11 @@ export default {
       dialogVisible: false,
       list: [],
       checkedNode: [],
-      submitNode: {},
     };
   },
   computed: {
     showTitle() {
-      return this.adapter(this.modelValue, this.submitNode);
+      return this.adapter(this.modelValue);
     },
   },
   methods: {
@@ -89,12 +88,14 @@ export default {
     submit() {
       const checkedNode = toRaw(this.checkedNode);
       if (checkedNode && checkedNode[0]) {
-        this.submitNode = deepcopy(checkedNode[0]);
-        this.$emit("update:modelValue", this.submitNode.id);
+        this.$emit(
+          "update:modelValue",
+          this.checkedNode[0].id,
+          deepcopy(checkedNode[0])
+        );
       }
 
       this.dialogVisible = false;
-      console.log(this.dialogVisible);
     },
   },
   created() {

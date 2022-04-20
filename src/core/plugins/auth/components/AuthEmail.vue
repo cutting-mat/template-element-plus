@@ -52,7 +52,6 @@
 import {
   emailValidCode,
   validEmailValidCode,
-  validUserExist,
 } from "@/core/plugins/auth/api/auth";
 
 export default {
@@ -66,19 +65,6 @@ export default {
           if (this.userEmail !== value) {
             return callback(new Error("邮箱不正确"));
           }
-        } else {
-          // 未登录/无邮箱用户，校验邮箱是否存在
-          return validUserExist({
-            email: value,
-          }).then((res) => {
-            if (res.data) {
-              // 保存accountInfo
-              this.accountInfo = res.data;
-              callback();
-            } else {
-              callback(new Error("邮箱不存在"));
-            }
-          });
         }
 
         callback();
@@ -99,7 +85,6 @@ export default {
           { min: 4, max: 6, message: "请输入正确的验证码", trigger: "blur" },
         ],
       },
-      accountInfo: null, // 用于未登录修改密码
     };
   },
   computed: {
@@ -154,7 +139,7 @@ export default {
             .then((res) => {
               this.loading = false;
               if (res.status === 200) {
-                this.$emit("success", res.data, this.accountInfo);
+                this.$emit("success", res.data);
               } else {
                 this.$refs.form.resetFields();
                 this.$message.warning(`验证失败`);
@@ -171,21 +156,21 @@ export default {
 </script>
 
 <style scoped>
-.auth_email >>> .el-input-group__append {
+.auth_email :deep(.el-input-group__append) {
   background-color: #409eff;
   border: 0;
 }
-.auth_email >>> .el-input-group__append .el-button {
+.auth_email :deep(.el-input-group__append .el-button) {
   border-radius: 0;
   margin: 0 -20px;
 }
-.auth_email >>> .el-input-group__append .countdownButton {
+.auth_email :deep(.el-input-group__append .countdownButton) {
   color: #fff;
   background-color: #409eff;
   border: 1px solid #409eff;
 }
 
-.auth_email >>> .el-input-group__append .el-button.is-disabled {
+.auth_email :deep(.el-input-group__append .el-button.is-disabled) {
   background-color: #a0cfff;
   border-color: #a0cfff;
 }

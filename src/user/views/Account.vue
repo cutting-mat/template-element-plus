@@ -126,7 +126,12 @@
               }
             "
           >
-            <img v-if="editForm.avatar" :src="editForm.avatar" alt />
+            <img
+              v-if="editForm.avatar"
+              class="upload_avatar_img"
+              :src="editForm.avatar"
+              alt
+            />
             <span v-else>上传头像</span>
           </uploader>
         </el-form-item>
@@ -161,7 +166,12 @@
           <OrgPicker
             v-model="editForm.orgId"
             :adapter="orgAdapter"
-            @change="$refs.editForm.validateField('orgId')"
+            @update:modelValue="
+              (id, item) => {
+                editForm.belongOrgName = item.name;
+                $refs.editForm.validateField('orgId');
+              }
+            "
           ></OrgPicker>
         </el-form-item>
         <el-form-item label="角色">
@@ -268,8 +278,8 @@ export default {
 
       this.fetchData(true);
     },
-    orgAdapter(value, obj) {
-      return obj.name || this.editForm.belongOrgName || value;
+    orgAdapter(value) {
+      return this.editForm.belongOrgName || value;
     },
     resetPassword: function (data) {
       if (!data) {
@@ -423,9 +433,9 @@ export default {
   background: #dedede;
   text-align: center;
 }
-.upload_avatar img {
-  width: 100%;
-  height: 100%;
+.upload_avatar_img {
+  width: 120px;
+  height: 120px;
   object-fit: cover;
 }
 </style>

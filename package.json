@@ -1,6 +1,6 @@
 {
   "name": "template-element-plus",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
     "serve": "vite --host",
     "build": "vite build",
@@ -9,7 +9,7 @@
   "homepage": "https://cutting-mat.github.io/template-element-plus/",
   "dependencies": {
     "@cutting-mat/axios": "^1.1.4",
-    "@cutting-mat/uploader": "^3.0.5",
+    "@cutting-mat/uploader": "^3.0.6",
     "@cutting-mat/vue-store": "^3.0.1",
     "@element-plus/icons-vue": "^1.1.4",
     "element-plus": "^2.1.9",

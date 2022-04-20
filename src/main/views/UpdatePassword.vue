@@ -11,7 +11,7 @@
       @submit.native.prevent="submitForm"
     >
       <el-alert
-        v-if="!formData.captcha"
+        v-if="!formData.token"
         title="未验证用户身份，请返回重试！"
         type="error"
         show-icon
@@ -67,7 +67,7 @@ export default {
     return {
       loading: false,
       formData: {
-        captcha: "",
+        token: "",
         checkPass: "",
         newPassword: "",
       },
@@ -90,15 +90,9 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true;
-          let queryParam = Object.assign({}, this.formData, {
-            account: this.$store.state.user.accountNumber,
-          });
+          let queryParam = Object.assign({}, this.formData);
           delete queryParam.checkPass;
-          if (this.$route.query.account) {
-            Object.assign(queryParam, {
-              account: this.$route.query.account,
-            });
-          }
+
           editPassword(queryParam)
             .then(() => {
               this.loading = false;
@@ -117,7 +111,7 @@ export default {
   },
   created: function () {
     if (this.$route.query.authCode) {
-      this.formData.captcha = this.$route.query.authCode;
+      this.formData.token = this.$route.query.authCode;
     }
   },
 };
