@@ -11,7 +11,7 @@
     <el-table-column
       v-if="picker"
       type="selection"
-      width="45"
+      width="50"
     ></el-table-column>
     <el-table-column prop="name" label="名称"></el-table-column>
     <el-table-column prop="fullName" label="全称"></el-table-column>
@@ -20,7 +20,7 @@
         $filter.date(scope.row.createTime)
       }}</template>
     </el-table-column>
-    <el-table-column label="操作" width="260">
+    <el-table-column label="操作" width="260" v-if="!picker">
       <template #default="scope">
         <slot name="action" :row="scope.row" />
       </template>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { isReactive, toRaw } from "vue";
 import { list } from "../api/org";
 
 export default {
@@ -68,7 +69,7 @@ export default {
     selection: {
       handler() {
         if (this.picker) {
-          this.$emit("pick", this.selection);
+          this.$emit("pick", toRaw(this.selection));
         }
       },
       deep: true,
@@ -76,6 +77,13 @@ export default {
   },
   methods: {
     handleSelectionChange(selection) {
+      selection = selection.map((item) => {
+        if (isReactive(item)) {
+          return toRaw(item);
+        } else {
+          return item;
+        }
+      });
       if (selection.length > 1 && !this.multiple) {
         // 单选模式
         selection.forEach((row, index) => {

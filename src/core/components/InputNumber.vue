@@ -8,10 +8,10 @@
     @input="handleInput"
     @change="handleChange($event, true)"
   >
-    <template slot="prepend">
+    <template #prepend>
       <slot name="prepend"></slot>
     </template>
-    <template slot="append">
+    <template #append>
       <slot name="append"></slot>
     </template>
   </el-input>

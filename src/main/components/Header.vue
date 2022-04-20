@@ -24,7 +24,7 @@
         <el-icon><caret-bottom /></el-icon>
       </span>
       <template #dropdown>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu>
           <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
           <el-dropdown-item command="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>

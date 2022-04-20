@@ -7,20 +7,22 @@
     class="auth_email"
     :v-loading="loading"
   >
-    <el-form-item>安全邮箱：{{ anonymousEmail }}</el-form-item>
+    <el-form-item v-if="anonymousEmail"
+      >安全邮箱：{{ anonymousEmail }}</el-form-item
+    >
     <el-form-item prop="inputEmail">
       <el-input
+        size="large"
         v-model="formData.inputEmail"
         placeholder="请输入安全邮箱"
-        prefix-icon="message"
-        size="large"
-      ></el-input>
+      >
+      </el-input>
     </el-form-item>
     <el-form-item prop="userInput">
       <el-input
+        size="large"
         v-model="formData.userInput"
         placeholder="请输入验证码"
-        size="large"
       >
         <template #append>
           <countdownButton
@@ -35,18 +37,23 @@
     </el-form-item>
     <el-form-item>
       <el-button
-        native-type="button"
         type="primary"
+        size="large"
         style="width: 100%"
         @click="handleSubmit"
-        >立即验证</el-button
       >
+        立即验证
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
-import { emailValidCode, validEmailValidCode } from "@/main/api/auth";
+import {
+  emailValidCode,
+  validEmailValidCode,
+  validUserExist,
+} from "@/core/plugins/auth/api/auth";
 
 export default {
   data() {
@@ -54,9 +61,26 @@ export default {
       if (!value) {
         callback(new Error("请输入安全邮箱"));
       } else {
-        if (this.userEmail !== value) {
-          callback(new Error("邮箱不正确"));
+        if (this.userEmail) {
+          // 已登录/有邮箱用户，校验邮箱是否匹配
+          if (this.userEmail !== value) {
+            return callback(new Error("邮箱不正确"));
+          }
+        } else {
+          // 未登录/无邮箱用户，校验邮箱是否存在
+          return validUserExist({
+            email: value,
+          }).then((res) => {
+            if (res.data) {
+              // 保存accountInfo
+              this.accountInfo = res.data;
+              callback();
+            } else {
+              callback(new Error("邮箱不存在"));
+            }
+          });
         }
+
         callback();
       }
     };
@@ -69,17 +93,18 @@ export default {
         inputEmail: null,
       },
       rules: {
-        inputEmail: [{ validator: validateEmail }],
+        inputEmail: [{ validator: validateEmail, trigger: [] }],
         userInput: [
           { required: true, message: "请输入验证码", trigger: "blur" },
           { min: 4, max: 6, message: "请输入正确的验证码", trigger: "blur" },
         ],
       },
+      accountInfo: null, // 用于未登录修改密码
     };
   },
   computed: {
     userEmail() {
-      return this.$store.state.user.email;
+      return this.$store.state.user.email || "";
     },
     anonymousEmail() {
       if (this.userEmail) {
@@ -129,7 +154,7 @@ export default {
             .then((res) => {
               this.loading = false;
               if (res.status === 200) {
-                this.$emit("success", res.data);
+                this.$emit("success", res.data, this.accountInfo);
               } else {
                 this.$refs.form.resetFields();
                 this.$message.warning(`验证失败`);
@@ -146,21 +171,21 @@ export default {
 </script>
 
 <style scoped>
-.auth_email :deep(.el-input-group__append) {
+.auth_email >>> .el-input-group__append {
   background-color: #409eff;
   border: 0;
 }
-.auth_email :deep(.el-input-group__append .el-button) {
+.auth_email >>> .el-input-group__append .el-button {
   border-radius: 0;
   margin: 0 -20px;
 }
-.auth_email :deep(.el-input-group__append .countdownButton) {
+.auth_email >>> .el-input-group__append .countdownButton {
   color: #fff;
   background-color: #409eff;
   border: 1px solid #409eff;
 }
 
-.auth_email :deep(.el-input-group__append .el-button.is-disabled) {
+.auth_email >>> .el-input-group__append .el-button.is-disabled {
   background-color: #a0cfff;
   border-color: #a0cfff;
 }

@@ -99,7 +99,7 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <div class="dialog-footer">
+        <div>
           <el-button type="primary" @click="save">确 定</el-button>
           <el-button @click="dialogVisible = false">取 消</el-button>
         </div>

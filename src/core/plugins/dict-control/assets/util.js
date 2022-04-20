@@ -7,12 +7,15 @@ export const mixin = {
     computed: {
         propsFinnal() {
             const getDefaultValue = (key) => {
-                if (Object.keys(this.$DictcontrolOption).indexOf(key) !== -1) {
-                    return this.$DictcontrolOption[key];
+                if (this.$props[key] === undefined) {
+                    if (Object.keys(this.$DictcontrolOption).indexOf(key) !== -1) {
+                        return this.$DictcontrolOption[key];
+                    }
                 }
+
                 return this.$props[key];
             };
-            let result = {};
+            const result = {};
             Object.keys(this.$props).forEach((prop) => {
                 result[prop] = getDefaultValue(prop);
             });

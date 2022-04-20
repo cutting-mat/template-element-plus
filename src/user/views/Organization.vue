@@ -48,10 +48,12 @@
           <el-input v-model="editForm.fullName"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer">
-        <el-button type="primary" @click="save()">确 定</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
-      </div>
+      <template #footer>
+        <div>
+          <el-button type="primary" @click="save()">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>

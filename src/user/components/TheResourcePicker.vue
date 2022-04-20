@@ -79,13 +79,14 @@ import { throttle, buildTree } from "@/core";
 import * as resource from "../api/resource";
 
 export default {
+  emits: ["check"],
   props: {
     picker: {
       type: Boolean,
       required: false,
       default: false,
     },
-    modelValue: {
+    checked: {
       type: Array,
       required: false,
     },
@@ -120,11 +121,9 @@ export default {
       },
       immediate: true,
     },
-    modelValue: {
+    checked: {
       handler: function () {
-        if (Array.isArray(this.modelValue)) {
-          this.$refs.tree.setCheckedKeys(this.modelValue);
-        }
+        this.$refs.tree.setCheckedKeys(this.checked);
       },
       deep: true,
     },
@@ -157,11 +156,9 @@ export default {
           userPermissions.menus.concat(userPermissions.resources)
         );
         //设置已勾选
-        if (Array.isArray(this.modelValue)) {
-          this.$nextTick(() => {
-            this.$refs.tree.setCheckedKeys(this.modelValue);
-          });
-        }
+        this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys(this.checked);
+        });
       });
     },
   },
@@ -173,11 +170,7 @@ export default {
   mounted() {
     // 数据变更监听器, 批量模式支持函数节流
     this.trigger = throttle(() => {
-      const checked = this.$refs.tree.getCheckedNodes();
-      this.$emit(
-        "updaate:modelValue",
-        checked.map((e) => e.id)
-      );
+      this.$emit("check", this.$refs.tree.getCheckedNodes());
     });
   },
 };

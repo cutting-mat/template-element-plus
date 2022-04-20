@@ -62,7 +62,7 @@
       "
     >
       <!-- 支持el-table append插槽 -->
-      <template slot="append">
+      <template #append>
         <slot name="append"></slot>
       </template>
       <!-- 支持多选 -->
@@ -75,8 +75,7 @@
       <CURDColumn v-for="(column, index) in columnsData" :column="column">
         <template
           v-for="slotName in Object.keys($scopedSlots)"
-          :slot="slotName"
-          slot-scope="scope"
+          #slotName="scope"
         >
           <slot
             :name="slotName"
@@ -121,7 +120,7 @@
         :formAttribute="formAttribute"
       />
       <template #footer>
-        <div class="dialog-footer">
+        <div>
           <el-button type="primary" @click="save">确 定</el-button>
           <el-button @click="dialogVisible = false">取 消</el-button>
         </div>

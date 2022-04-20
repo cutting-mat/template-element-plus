@@ -6,13 +6,13 @@
   >
     <el-option
       :label="$attrs.placeholder || '全部'"
-      :value="null"
+      value=""
       v-if="nullAble"
     ></el-option>
     <el-option
       v-for="item in list"
-      :label="item[labelKey]"
-      :value="item[valueKey]"
+      :label="item[propsFinnal.labelKey || 'label']"
+      :value="item[propsFinnal.valueKey || 'value']"
     ></el-option>
   </el-select>
 </template>
@@ -30,16 +30,10 @@ export default {
     valueKey: {
       type: String,
       required: false,
-      default() {
-        return "value";
-      },
     },
     labelKey: {
       type: String,
       required: false,
-      default() {
-        return "label";
-      },
     },
     nullAble: {
       type: Boolean,
@@ -55,21 +49,18 @@ export default {
     param: {
       type: String,
       required: false,
-      default() {
-        return undefined;
-      },
     },
     responseTransfer: {
       type: Function,
       required: false,
       default(response) {
-        return response;
+        return response.data;
       },
     },
   },
   data() {
     return {
-      bindValue: null,
+      bindValue: "",
       list: [],
     };
   },
@@ -85,22 +76,18 @@ export default {
   },
   methods: {
     fetchData: async function () {
-      if (
-        !this.$DictcontrolOption &&
-        !this.$DictcontrolOption.request &&
-        !this.request
-      ) {
+      const DataRequest = this.propsFinnal.request;
+      if (typeof DataRequest !== "function") {
         return console.warn(
           "DictControl: The required configuration [request] is missing!"
         );
       }
-
-      const DataRequest = this.request || this.$DictcontrolOption.request;
       if (typeof DataRequest !== "function") {
         return console.warn("DictControl: [request] must be a Function!");
       }
-
-      this.list = this.responseTransfer(await DataRequest(this.param));
+      this.list = this.propsFinnal.responseTransfer(
+        await DataRequest(this.param)
+      );
     },
   },
   created() {

@@ -6,7 +6,9 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
   >
-    <div slot="title">验证身份（{{ currentAuthType.title }}）</div>
+    <template #title>
+      <div>验证身份（{{ currentAuthType.title }}）</div>
+    </template>
     <el-alert
       title="为确保您的账号安全，请先验证身份"
       type="success"
@@ -60,6 +62,7 @@ export default {
       dialogVisible: false,
       currentAuthType: null,
       result: null,
+      accountInfo: null,
     };
   },
   computed: {
@@ -94,7 +97,8 @@ export default {
     },
   },
   methods: {
-    handleSuccess(authCode) {
+    handleSuccess(authCode, accountInfo) {
+      this.accountInfo = accountInfo;
       this.result = authCode;
       this.dialogVisible = false;
       this.$emit("success", authCode);
@@ -104,7 +108,13 @@ export default {
         this.result = null;
         this.dialogVisible = true;
         return new Promise((resolve) => {
-          this.$watch("result", resolve);
+          this.$watch("result", (authCode) => {
+            console.log(authCode, this.accountInfo);
+            resolve({
+              authCode,
+              accountInfo: this.accountInfo,
+            });
+          });
         });
       }
     },

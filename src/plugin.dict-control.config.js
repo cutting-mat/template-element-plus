@@ -19,8 +19,5 @@ export default {
         }, {
             cache: true,
         })
-    },
-    responseTransfer(res) {
-        return res.data
     }
 }

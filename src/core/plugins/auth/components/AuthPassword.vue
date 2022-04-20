@@ -9,20 +9,19 @@
   >
     <el-form-item prop="password">
       <el-input
+        size="large"
         v-model="formData.password"
         placeholder="请输入当前登录密码"
-        prefix-icon="lock"
+        prefix-icon="el-icon-lock"
         show-password
-        size="large"
       ></el-input>
     </el-form-item>
     <el-form-item>
       <el-button
-        native-type="button"
         type="primary"
+        size="large"
         style="width: 100%"
         @click="handleSubmit"
-        size="large"
       >
         立即验证
       </el-button>
@@ -31,7 +30,7 @@
 </template>
 
 <script>
-import { validPassword } from "@/main/api/auth";
+import { validPassword } from "@/core/plugins/auth/api/auth";
 
 export default {
   data() {

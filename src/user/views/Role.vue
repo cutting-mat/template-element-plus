@@ -71,10 +71,8 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <span class="dialog-footer">
-          <el-button type="primary" @click="save">确 定</el-button>
-          <el-button @click="dialogVisible = false">取 消</el-button>
-        </span>
+        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
       </template>
     </el-dialog>
   </div>

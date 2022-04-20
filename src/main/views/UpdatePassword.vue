@@ -16,13 +16,20 @@
         type="error"
         show-icon
         :closable="false"
-        style="margin-bottom:20px"
+        style="margin-bottom: 20px"
       ></el-alert>
       <el-form-item label="新密码" prop="newPassword">
-        <input-password v-model="formData.newPassword" autocomplete="off"></input-password>
+        <input-password
+          v-model="formData.newPassword"
+          autocomplete="off"
+        ></input-password>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="formData.checkPass" autocomplete="off"></el-input>
+        <el-input
+          type="password"
+          v-model="formData.checkPass"
+          autocomplete="off"
+        ></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -33,7 +40,7 @@
 </template>
 
 <script>
-import * as user from "../api/personal";
+import { editPassword } from "../api/personal";
 
 export default {
   data() {
@@ -76,7 +83,6 @@ export default {
         ],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
       },
-
     };
   },
   methods: {
@@ -84,18 +90,22 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true;
-          let queryParam = Object.assign({}, this.formData);
+          let queryParam = Object.assign({}, this.formData, {
+            account: this.$store.state.user.accountNumber,
+          });
           delete queryParam.checkPass;
-          user
-            .editPassword(queryParam)
+          if (this.$route.query.account) {
+            Object.assign(queryParam, {
+              account: this.$route.query.account,
+            });
+          }
+          editPassword(queryParam)
             .then(() => {
               this.loading = false;
-              this.$message({
-                message: "操作成功",
-                type: "success",
-                onClose: () => {
-                  this.$router.go(-1)
-                }
+              this.$alert("密码修改成功", {
+                callback: () => {
+                  this.$router.go(-1);
+                },
               });
             })
             .catch(() => {
@@ -104,15 +114,13 @@ export default {
         }
       });
     },
-    
   },
   created: function () {
     if (this.$route.query.authCode) {
-      this.formData.captcha = this.$route.query.authCode
+      this.formData.captcha = this.$route.query.authCode;
     }
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

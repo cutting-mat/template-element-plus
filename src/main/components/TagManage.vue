@@ -17,10 +17,12 @@
       <el-button type="text">
         <el-icon><arrow-down-bold /></el-icon>
       </el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="other">关闭其他</el-dropdown-item>
-        <el-dropdown-item command="all">关闭所有</el-dropdown-item>
-      </el-dropdown-menu>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="other">关闭其他</el-dropdown-item>
+          <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
     </el-dropdown>
   </div>
 </template>

@@ -104,6 +104,7 @@
       title="账号信息"
       v-model="dialogVisible"
       width="600px"
+      destroy-on-close
       @close="handleCloseDialog"
     >
       <el-form
@@ -181,10 +182,8 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary" @click="save">确 定</el-button>
-          <el-button @click="dialogVisible = false">取 消</el-button>
-        </div>
+        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
       </template>
     </el-dialog>
   </div>

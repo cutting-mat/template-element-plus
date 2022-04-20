@@ -8,7 +8,6 @@
     <template #append>
       <div
         class="valid_image_wrap flex-row align-center"
-        slot="append"
         :style="{ height: imgHeight, width: imgWidth, margin: '0 -20px' }"
         @click="fetchData"
       >
@@ -25,7 +24,10 @@
 </template>
 
 <script>
-import { captchaImage, validateCaptchaImage } from "@/main/api/auth";
+import {
+  captchaImage,
+  validateCaptchaImage,
+} from "@/core/plugins/auth/api/auth";
 
 export default {
   props: {
@@ -99,13 +101,13 @@ export default {
 </script>
 
 <style scoped>
-.InputCaptchaImage :deep(.valid_image_wrap) {
+.InputCaptchaImage >>> .valid_image_wrap {
   position: relative;
   overflow: hidden;
   text-align: center;
   cursor: pointer;
 }
-.InputCaptchaImage :deep(.valid_image) {
+.InputCaptchaImage >>> .valid_image {
   position: absolute;
   left: 0;
   top: 0;

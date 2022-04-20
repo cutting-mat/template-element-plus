@@ -43,7 +43,7 @@ export default {
       required: false,
       default: "",
     },
-    value: {
+    modelValue: {
       type: [String, Number],
       required: false,
       default: "",
@@ -180,7 +180,7 @@ export default {
     },
   },
   watch: {
-    value: {
+    modelValue: {
       handler(newVal) {
         this.myValue = newVal;
       },
@@ -188,7 +188,7 @@ export default {
     },
     myValue: {
       handler() {
-        this.$emit("change", this.myValue);
+        this.$emit("update:modelValue", this.myValue);
       },
       immediate: true,
     },

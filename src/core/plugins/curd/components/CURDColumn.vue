@@ -28,25 +28,26 @@
       </div>
     </template>
     <!-- 多级表头 -->
-    <CURDColumn
-      v-if="column.children && column.children.length > 0"
-      v-for="(column, columnIndex) in column.children"
-      :key="'CURDColumn' + columnIndex"
-      :column="column"
-    >
-      <template
-        :slot="slotName"
-        slot-scope="scope"
-        v-for="slotName in Object.keys($scopedSlots)"
+    <template v-if="column.children && column.children.length > 0">
+      <CURDColumn
+        v-for="(column, columnIndex) in column.children"
+        :key="columnIndex"
+        :column="column"
       >
-        <slot
-          :name="slotName"
-          :column="scope.column"
-          :row="scope.row"
-          :prop="scope.prop"
-        ></slot>
-      </template>
-    </CURDColumn>
+        <template
+          v-slot="slotName"
+          slot-scope="scope"
+          v-for="slotName in Object.keys($scopedSlots)"
+        >
+          <slot
+            :name="slotName"
+            :column="scope.column"
+            :row="scope.row"
+            :prop="scope.prop"
+          ></slot>
+        </template>
+      </CURDColumn>
+    </template>
   </el-table-column>
 </template>
 

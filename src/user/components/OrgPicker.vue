@@ -4,8 +4,8 @@
       :size="size"
       readonly
       :modelValue="showTitle"
-      @focus="dialogVisible = true"
       placeholder="请选择"
+      @click="dialogVisible = true"
     ></el-input>
     <!-- 弹窗 -->
     <el-dialog
@@ -15,30 +15,22 @@
       title="选择组织"
       v-model="dialogVisible"
       width="1000px"
-      @open="dialogOpen"
+      destroy-on-close
+      @open="checkedNode = []"
     >
       <div class="orgPicker">
-        <OrgTree
-          v-if="dialogVisible"
-          :value="list"
-          picker
-          @pick="checkedNode = $event"
-        ></OrgTree>
+        <OrgTree :value="list" picker @pick="checkedNode = $event"></OrgTree>
       </div>
-
-      <div slot="footer">
-        <el-button size="medium" type="primary" @click="submit"
-          >确 定</el-button
-        >
-        <el-button size="medium" @click="dialogVisible = false"
-          >取 消</el-button
-        >
-      </div>
+      <template #footer>
+        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { toRaw } from "vue";
 import { buildTree, deepcopy } from "@/core";
 import { list } from "../api/org";
 import { defineAsyncComponent } from "vue";
@@ -54,14 +46,13 @@ export default {
       // 输入框显示适配
       type: Function,
       required: false,
-      default(value, obj) {
-        return obj.name || value;
+      default(value, selected) {
+        return selected.name || value;
       },
     },
     size: {
       type: String,
       required: false,
-      default: "small",
     },
   },
   components: {
@@ -72,7 +63,7 @@ export default {
       loading: false,
       dialogVisible: false,
       list: [],
-      checkedNode: {},
+      checkedNode: [],
       submitNode: {},
     };
   },
@@ -82,10 +73,6 @@ export default {
     },
   },
   methods: {
-    dialogOpen() {
-      this.checkedNode = {};
-      this.submitNode = {};
-    },
     fetchData: function () {
       this.loading = true;
       list()
@@ -100,12 +87,14 @@ export default {
         });
     },
     submit() {
-      if (this.checkedNode && this.checkedNode[0]) {
-        this.submitNode = deepcopy(this.checkedNode[0]);
-        this.$emit("update:modelValue", this.checkedNode[0].id);
+      const checkedNode = toRaw(this.checkedNode);
+      if (checkedNode && checkedNode[0]) {
+        this.submitNode = deepcopy(checkedNode[0]);
+        this.$emit("update:modelValue", this.submitNode.id);
       }
 
       this.dialogVisible = false;
+      console.log(this.dialogVisible);
     },
   },
   created() {
