@@ -1,6 +1,6 @@
 {
   "name": "template-element-plus",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "scripts": {
     "serve": "vite --host",
     "build": "vite build",
@@ -12,6 +12,7 @@
     "@cutting-mat/uploader": "^3.0.6",
     "@cutting-mat/vue-store": "^3.0.1",
     "@element-plus/icons-vue": "^1.1.4",
+    "crypto-js": "^4.1.1",
     "element-plus": "^2.1.9",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.2.33",

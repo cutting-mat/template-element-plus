@@ -1,14 +1,16 @@
-//import axios from 'axios';
+// import axios from 'axios';
 import axios from '@cutting-mat/axios';
 import { event, routeGenerator } from '@/core'
-import requestConfig from '@/request.config';
-console.log('[Core] Request Start.')
+import { default as requestConfig, CryptoConfig } from '@/request.config';
 import { ElMessage } from 'element-plus';
+
+console.log(`[Core] Request Start. Encryption: ${CryptoConfig.enable ? 'Enabled' : 'Disabled'}`);
+
 // 创建请求实例
 const instance = axios.create(requestConfig);
 
 // 请求前处理
-instance.interceptors.request.use(function (config) {
+instance.interceptors.request.use(async function (config) {
     if (config.method === 'get' || config.method === 'delete') {
         // 过滤get和delete请求中的空字符参数
         for (let x in config.params) {
@@ -19,11 +21,26 @@ instance.interceptors.request.use(function (config) {
         }
     }
     // 如果没有开启请求控制，则删除相关自定义头，否则需要服务端设置 Access-Control-Allow-Headers
-    const permissionConfig = import.meta.glob("@/plugin.permission.config").default;
+    let permissionConfig = await import("@/plugin.permission.config.js");
+    permissionConfig = permissionConfig.default;
     if (!(permissionConfig && permissionConfig.AccessControl && permissionConfig.interceptorsRequest)) {
         delete config.headers["X-Request-Permission"];
     }
-
+    // 请求加密
+    if (CryptoConfig.enable) {
+        const SecretKey = CryptoConfig.getSecretKey(config)
+        if (SecretKey) {
+            CryptoConfig.debug && console.log('请求加密', config.url)
+            const encData = CryptoConfig.encryptData(config, SecretKey);
+            CryptoConfig.debug && console.log('encData', encData)
+            // 发送加密请求
+            config.url = CryptoConfig.getCryptoUrl(config);
+            config.method = 'post';
+            config.data = { data: encData };
+            config.params = {}
+            return config;
+        }
+    }
     return config;
 }, function (error) {
     return Promise.reject(error);
@@ -31,10 +48,17 @@ instance.interceptors.request.use(function (config) {
 
 // 响应后处理
 instance.interceptors.response.use(function (response) {
-    // 业务失败处理(兼容原response.data.code格式)
-    if (response.data.code === 500) {
-        return catchError({ response })
+    // 请求解密
+    if (CryptoConfig.enable) {
+        const SecretKey = CryptoConfig.getSecretKey(response.config)
+        if (SecretKey) {
+            CryptoConfig.debug && console.log('请求解密', response)
+            response = CryptoConfig.decryptResponse(response, SecretKey)
+            CryptoConfig.debug && console.log('response', response)
+        }
+
     }
+
     // token临近过期, 重新签发token
     if (response.headers['jwt-update-token']) {
         event.emit('login', {
@@ -44,12 +68,16 @@ instance.interceptors.response.use(function (response) {
             }
         })
     }
+
     // 控制台输出接口返回
     if (window.DebugRequest) {
         console.log(response.request.custom.options.type, response.request.custom.options.url, ' => ', response.data)
     }
 
-    // 手动剥离一层data
+    // (兼容response.data.code格式)
+    if (response.data.code === 500) {
+        return catchError({ response })
+    }
     if (response.data.data) {
         response.data = response.data.data
     }
