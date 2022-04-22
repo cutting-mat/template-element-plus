@@ -34,12 +34,12 @@ const enCrypto = (content, secretKey) => {
         const salt = CryptoJS.lib.WordArray.random(8)
         const iv = CryptoJS.lib.WordArray.create(CryptoJS.SHA256(salt).words.slice(0, 16))
         const key = CryptoJS.PBKDF2(secretKey, salt, { iterations: 1, keySize: 128 / 32 })
-        const encryptData = CryptoJS.AES.encrypt(content, key, {
+        const EncryptData = CryptoJS.AES.encrypt(content, key, {
             iv: iv,
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Pkcs7
         })
-        const encDataStr = CryptoJS.lib.WordArray.create([0x53616c74, 0x65645f5f]).concat(salt).concat(encryptData.ciphertext).toString(CryptoJS.enc.Base64)
+        const encDataStr = CryptoJS.lib.WordArray.create([0x53616c74, 0x65645f5f]).concat(salt).concat(EncryptData.ciphertext).toString(CryptoJS.enc.Base64)
         return encDataStr
     } else {
         console.warn('enCrypto(): 缺少 secretKey')
@@ -72,38 +72,39 @@ const deCrypto = (content, secretKey) => {
 }
 // 请求加密相关配置
 export const CryptoConfig = {
-    enable: false, // process.env.NODE_ENV === 'production', // 加密开关
-    debug: process.env.NODE_ENV === 'development', // 调试开关
-    getCryptoUrl: (requestConfig) => { // 自定义加密请求地址方法
+    Enable: false, // process.env.NODE_ENV === 'production', // 加密开关
+    Debug: process.env.NODE_ENV === 'development', // 调试开关
+    GetCryptoUrl: (requestConfig) => { // 自定义加密请求地址方法
         return `/sapi/${CryptoJS.MD5(requestConfig.url + '|sogdata.com')}`
     },
-    getSecretKey: requestConfig => { // 自定义加解密密钥方法
+    GetSecretKey: requestConfig => { // 自定义加解密密钥方法
         const token = requestConfig.headers.Authorization || (requestConfig.headers.common && requestConfig.headers.common.Authorization);
         if (token) {
-            console.log(token.split('.'))
             return token.split('.')[2];
         } else {
             return null
         }
     },
-    encryptData: function (requestConfig, SecretKey) { // 自定义加密方法
+    EncryptData: function (requestConfig, SecretKey) { // 自定义加密方法
         const baseParam = {
             path: `${requestConfig.url}?_ts=${new Date().getTime()}`,
             method: requestConfig.method,
             params: (requestConfig.data || requestConfig.params || {}),
-            device: 'admin'
         }
         return enCrypto(JSON.stringify(baseParam), SecretKey);
     },
-    decryptResponse: function (response, SecretKey) { // 自定义解密方法
-        if (SecretKey && response.data.split) {
-            const decData = deCrypto(response.data, SecretKey)
+    DecryptResponse: function (response, SecretKey) { // 自定义解密方法
+        if (SecretKey && response.split) {
+            const decData = deCrypto(response, SecretKey)
             if (decData) {
-                response.data = JSON.parse(decData)
+                return JSON.parse(decData)
             } else {
-                console.warn(`decryptResponse(): 解密失败`)
+                return console.warn(`DecryptResponse(): 解密失败`)
             }
         }
         return response
-    }
+    },
+    WhiteList: [
+        '/url/disable-crypto'
+    ]
 }

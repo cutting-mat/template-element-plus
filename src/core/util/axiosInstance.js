@@ -4,10 +4,15 @@ import { event, routeGenerator } from '@/core'
 import { default as requestConfig, CryptoConfig } from '@/request.config';
 import { ElMessage } from 'element-plus';
 
-console.log(`[Core] Request Start. Encryption: ${CryptoConfig.enable ? 'Enabled' : 'Disabled'}`);
+console.log(`[Core] Request Start. Encryption: ${CryptoConfig.Enable ? 'Enabled' : 'Disabled'}`);
 
 // 创建请求实例
 const instance = axios.create(requestConfig);
+
+// 判断是否开启请求加密
+const needCrypto = function (config) {
+    return CryptoConfig.Enable && CryptoConfig.WhiteList.indexOf(config.url) === -1
+}
 
 // 请求前处理
 instance.interceptors.request.use(async function (config) {
@@ -27,14 +32,12 @@ instance.interceptors.request.use(async function (config) {
         delete config.headers["X-Request-Permission"];
     }
     // 请求加密
-    if (CryptoConfig.enable) {
-        const SecretKey = CryptoConfig.getSecretKey(config)
+    if (needCrypto(config)) {
+        const SecretKey = CryptoConfig.GetSecretKey(config)
         if (SecretKey) {
-            CryptoConfig.debug && console.log('请求加密', config.url)
-            const encData = CryptoConfig.encryptData(config, SecretKey);
-            CryptoConfig.debug && console.log('encData', encData)
+            const encData = CryptoConfig.EncryptData(config, SecretKey);
             // 发送加密请求
-            config.url = CryptoConfig.getCryptoUrl(config);
+            config.url = CryptoConfig.GetCryptoUrl(config);
             config.method = 'post';
             config.data = { data: encData };
             config.params = {}
@@ -49,12 +52,13 @@ instance.interceptors.request.use(async function (config) {
 // 响应后处理
 instance.interceptors.response.use(function (response) {
     // 请求解密
-    if (CryptoConfig.enable) {
-        const SecretKey = CryptoConfig.getSecretKey(response.config)
+    if (needCrypto(response.config)) {
+        const SecretKey = CryptoConfig.GetSecretKey(response.config)
         if (SecretKey) {
-            CryptoConfig.debug && console.log('请求解密', response)
-            response = CryptoConfig.decryptResponse(response, SecretKey)
-            CryptoConfig.debug && console.log('response', response)
+            const reqData = CryptoConfig.DecryptResponse(JSON.parse(response.config.data).data, SecretKey)
+            CryptoConfig.Debug && console.log('请求>>>>', reqData)
+            response.data = CryptoConfig.DecryptResponse(response.data, SecretKey);
+            CryptoConfig.Debug && console.log('响应<<<<<', response)
         }
 
     }
