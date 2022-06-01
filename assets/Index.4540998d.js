@@ -1,0 +1,1 @@
+import{_ as o,r,o as t,g as n}from"./index.07ef7170.js";const s={data(){return{}},methods:{},created:function(){}};function a(c,_,p,d,u,f){const e=r("router-view");return t(),n(e,{class:"scrollbar"})}var l=o(s,[["render",a]]);export{l as default};
