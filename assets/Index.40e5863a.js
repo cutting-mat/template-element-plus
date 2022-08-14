@@ -1,1 +1,0 @@
-import{_ as r}from"./index.711114fb.js";import{r as t,o,a as e}from"./ui.7155d707.js";const a=r({data:()=>({}),methods:{},created:function(){}},[["render",function(r,a,s,n,d,i){const f=t("router-view");return o(),e(f)}]]);export{a as default};
