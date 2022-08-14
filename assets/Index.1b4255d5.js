@@ -1,1 +1,0 @@
-import{_ as r,r as s,o as t,g as a}from"./index.cc0542f8.js";const e=r({data:()=>({}),methods:{},created:function(){}},[["render",function(r,e,o,c,n,d){const f=s("router-view");return t(),a(f,{class:"scrollbar"})}]]);export{e as default};
