@@ -11,10 +11,8 @@
     "@cutting-mat/axios": "^1.2.0",
     "@cutting-mat/uploader": "^3.1.0",
     "@element-plus/icons-vue": "^2.0.9",
-    "cropperjs": "^1.5.12",
     "crypto-js": "^4.1.1",
     "element-plus": "^2.2.12",
-    "ios-photo-repair": "^1.1.1",
     "pinia": "^2.0.18",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.2.37",
@@ -29,6 +27,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^9.3.0",
     "mockjs": "^1.1.0",
+    "terser": "^5.14.2",
     "unplugin-element-plus": "^0.4.1",
     "vite": "^3.0.6"
   }
