@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { deepcopy, buildTree } from "@/core";
+import { deepcopy, buildTree } from "@/core/util";
 
 export default {
   props: {
@@ -250,7 +250,7 @@ export default {
       editScope: "",
       queryParamFinnal: {
         p: 1,
-        pageSize: 10,
+        pageSize: 20,
       },
       totalCount: 0,
       totalPage: 0,

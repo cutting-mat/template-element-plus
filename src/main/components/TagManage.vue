@@ -14,9 +14,9 @@
     </div>
     <!-- 其他操作按钮 -->
     <el-dropdown @command="handleTags">
-      <el-button type="text">
+      <el-link>
         <el-icon><arrow-down-bold /></el-icon>
-      </el-button>
+      </el-link>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="other">关闭其他</el-dropdown-item>
@@ -31,13 +31,12 @@
 export default {
   data() {
     return {
-      state: this.$store.state,
       list: [],
     };
   },
   computed: {
     allMenuFlat() {
-      return this.state.permission.menus || [];
+      return this.$store.permission.menus || [];
     },
   },
   watch: {

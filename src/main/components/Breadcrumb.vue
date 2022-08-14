@@ -12,9 +12,9 @@
       </template>
     </el-breadcrumb>
     <slot>
-      <el-button type="text" @click="$router.go(-1)">
+      <el-link @click="$router.go(-1)">
         <el-icon><back /></el-icon> 返回
-      </el-button>
+      </el-link>
     </slot>
   </div>
 </template>

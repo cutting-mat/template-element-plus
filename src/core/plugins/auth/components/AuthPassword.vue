@@ -6,23 +6,21 @@
     label-position="left"
     class="auth_email"
     :v-loading="loading"
+    @submit.native.prevent="handleSubmit"
   >
     <el-form-item prop="password">
       <el-input
-        size="large"
         v-model="formData.password"
         placeholder="请输入当前登录密码"
-        prefix-icon="el-icon-lock"
         show-password
-      ></el-input>
+      >
+        <template #prefix>
+          <el-icon><Lock /></el-icon>
+        </template>
+      </el-input>
     </el-form-item>
     <el-form-item>
-      <el-button
-        type="primary"
-        size="large"
-        style="width: 100%"
-        @click="handleSubmit"
-      >
+      <el-button native-type="submit" type="primary" style="width: 100%">
         立即验证
       </el-button>
     </el-form-item>
@@ -33,6 +31,8 @@
 import { validPassword } from "@/core/plugins/auth/api/auth";
 
 export default {
+  name: "AuthPassword",
+  emits: ["success"],
   data() {
     return {
       loading: false,
@@ -49,8 +49,8 @@ export default {
   },
   methods: {
     handleSubmit() {
-      this.$refs.form.validateField("password", (valid) => {
-        if (valid) {
+      this.$refs.form.validateField("password", (err) => {
+        if (!err) {
           this.loading = true;
 
           validPassword({

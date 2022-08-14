@@ -31,31 +31,39 @@
         <span class="extendGroup" v-if="!picker">
           <!-- 根据 data.type===0 / 1 判断是路由还是请求 -->
           <el-button
+            text
+            size="small"
+            type="primary"
             v-auth="resource.edit"
-            type="text"
             @click.stop="$emit('edit', data)"
           >
             编辑
           </el-button>
           <el-button
+            text
+            size="small"
+            type="primary"
             v-auth="resource.add"
             v-if="data.type === 0"
-            type="text"
             @click.stop="$emit('append', data)"
           >
             添加子菜单
           </el-button>
           <el-button
+            text
+            size="small"
+            type="primary"
             v-auth="resource.add"
             v-if="data.type === 0"
-            type="text"
             @click.stop="$emit('add-resource', data)"
           >
             添加资源
           </el-button>
           <el-button
+            text
+            size="small"
+            type="danger"
             v-auth="resource.remove"
-            type="text"
             @click.stop="$emit('remove', data)"
           >
             删除
@@ -63,7 +71,9 @@
         </span>
         <span class="extendGroup" v-else>
           <el-button
-            type="text"
+            text
+            size="small"
+            type="primary"
             @click.stop="handleCheckChange(data, !node.checked, true)"
           >
             批量选择
@@ -75,7 +85,7 @@
 </template>
 
 <script>
-import { throttle, buildTree } from "@/core";
+import { throttle, buildTree } from "@/core/util";
 import * as resource from "../api/resource";
 
 export default {
@@ -151,7 +161,7 @@ export default {
       });
     },
     fetchData: function () {
-      this.$store.action("permission").then((userPermissions) => {
+      this.$store.getPermission().then((userPermissions) => {
         this.list = buildTree(
           userPermissions.menus.concat(userPermissions.resources)
         );

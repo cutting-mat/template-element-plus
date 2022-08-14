@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div v-loading="loading" class="scrollbar">
     <ToolBar>
       <el-button v-auth="org.add" type="primary" @click="dialogVisible = true">
         <el-icon><plus /></el-icon>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { deepcopy } from "@/core";
+import { deepcopy } from "@/core/util";
 import * as org from "../api/org";
 import { defineAsyncComponent } from "vue";
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col" v-loading="loading">
+  <div class="flex-col scrollbar" v-loading="loading">
     <ToolBar></ToolBar>
     <div class="flex-1 flex-row">
       <div class="resourceWrap flex-1 scrollbar">
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { buildTree, deepcopy } from "@/core";
+import { buildTree, deepcopy } from "@/core/util";
 import * as resource from "../api/resource";
 import { defineAsyncComponent } from "vue";
 
@@ -211,7 +211,7 @@ export default {
     fetchData: function () {
       this.loading = true;
       this.$store
-        .action("permission", {
+        .getPermission({
           cache: "update",
         })
         .then((userPermissions) => {

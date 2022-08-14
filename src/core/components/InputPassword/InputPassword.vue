@@ -1,35 +1,34 @@
 <template>
-  <div class="input-password">
-    <el-input
-      :name="name"
-      :modelValue="myValue"
-      :placeholder="placeholder"
-      :size="size"
-      :maxlength="maxlength"
-      :minlength="minlength"
-      :suffix-icon="suffixIcon"
-      :prefix-icon="prefixIcon"
-      :autocomplete="autocomplete"
-      :show-password="showPassword"
-      :disabled="disabled"
-      :readonly="readonly"
-      :clearable="clearable"
-      :autofocus="autofocus"
-      @paste.native.capture.prevent="false"
-      @copy.native.capture.prevent="false"
-      @cut.native.capture.prevent="false"
-      @input="handleInput"
-    >
-      <template #append v-if="myValue">
-        <div class="_text" :style="scoreStyle.textStyle">
-          {{ format(score) }}
-        </div>
-        <div class="_progress">
-          <div class="_bar" :style="scoreStyle.progressStyle"></div>
-        </div>
-      </template>
-    </el-input>
-  </div>
+  <el-input
+    class="input-password"
+    :name="name"
+    :value="myValue"
+    :placeholder="placeholder"
+    :size="size"
+    :maxlength="maxlength"
+    :minlength="minlength"
+    :suffix-icon="suffixIcon"
+    :prefix-icon="prefixIcon"
+    :autocomplete="autocomplete"
+    :show-password="showPassword"
+    :disabled="disabled"
+    :readonly="readonly"
+    :clearable="clearable"
+    :autofocus="autofocus"
+    @paste.native.capture.prevent="false"
+    @copy.native.capture.prevent="false"
+    @cut.native.capture.prevent="false"
+    @input="handleInput"
+  >
+    <template #append v-if="myValue">
+      <div class="_text" :style="scoreStyle.textStyle">
+        {{ format(score) }}
+      </div>
+      <div class="_progress">
+        <div class="_bar" :style="scoreStyle.progressStyle"></div>
+      </div>
+    </template>
+  </el-input>
 </template>
 
 <script>
@@ -37,13 +36,17 @@ import { checkPassword } from "./assets/checkpassword";
 
 export default {
   name: "input-password",
+  model: {
+    prop: "value",
+    event: "change",
+  },
   props: {
     name: {
       type: String,
       required: false,
       default: "",
     },
-    modelValue: {
+    value: {
       type: [String, Number],
       required: false,
       default: "",
@@ -63,13 +66,13 @@ export default {
       /**密码最小位数 */
       type: Number,
       require: false,
-      default: 6,
+      default: 8,
     },
     maxlength: {
       /**密码最大位数 */
       type: Number,
       require: false,
-      default: 16,
+      default: 20,
     },
     suffixIcon: {
       /**后缀图标 */
@@ -180,7 +183,7 @@ export default {
     },
   },
   watch: {
-    modelValue: {
+    value: {
       handler(newVal) {
         this.myValue = newVal;
       },
@@ -188,7 +191,7 @@ export default {
     },
     myValue: {
       handler() {
-        this.$emit("update:modelValue", this.myValue);
+        this.$emit("change", this.myValue);
       },
       immediate: true,
     },
@@ -209,15 +212,6 @@ export default {
 </script>
 
 <style scoped>
-.input-password {
-  display: flex;
-  width: 100%;
-}
-.input-password .el-input {
-  -ms-flex: 1;
-  flex: 1;
-  min-width: 0;
-}
 .input-password :deep(.el-input-group__append) {
   background: #fcfcfc;
   padding: 0 12px;

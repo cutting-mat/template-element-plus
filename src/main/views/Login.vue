@@ -34,9 +34,7 @@
         </el-form-item>
         <div class="flex-row align-center">
           <div class="flex-1">
-            <el-checkbox v-model="$store.state.rememberLogin"
-              >记住我</el-checkbox
-            >
+            <!-- <el-checkbox v-model="$store.rememberLogin">记住我</el-checkbox> -->
           </div>
           <el-link type="info" @click="handleChangePw"> 忘记密码？ </el-link>
         </div>
@@ -49,6 +47,13 @@
             >登录</el-button
           >
         </el-form-item>
+        <div class="flex-row">
+          <div class="flex-1"></div>
+          <el-link type="primary" @click="$router.push({ name: '注册' })">
+            立即注册
+            <i class="el-icon-right"></i>
+          </el-link>
+        </div>
       </el-form>
       <div class="footer-info">
         @2022 版权所有 占位文字
@@ -70,6 +75,7 @@
 <script>
 import { event } from "@/core";
 import { login } from "@/main/api/common";
+import { SetAccountToken } from "@/plugin.permission.config";
 
 export default {
   data() {
@@ -131,11 +137,13 @@ export default {
             .then((res) => {
               if (res.status === 200) {
                 this.loading = false;
+                // 存储token
+                SetAccountToken(res.data);
                 // 登录后全局发布 login 事件, 将被 权限模块 接收
-                event.emit("login", {
-                  redirect:
-                    this.$router.currentRoute.value.query.redirect || "/",
-                  data: res.data,
+                event.emit("login", () => {
+                  this.$router.replace({
+                    path: this.$router.currentRoute.value.query.redirect || "/",
+                  });
                 });
               } else {
                 this.$message({

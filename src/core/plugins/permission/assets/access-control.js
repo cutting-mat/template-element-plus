@@ -1,4 +1,5 @@
-import { buildTree, axiosInstance } from "@/core";
+import { axiosInstance } from "@/core";
+import { buildTree } from "@/core/util";
 
 import { MainRoute } from "@/route.config";
 import {
@@ -15,10 +16,12 @@ import {
 export const matchRequest = function (axiosRequest) {
   let result = null;
   if (typeof axiosRequest === "function") {
-    let regex = new RegExp(/\.([^(]+)\("([^"]+)"/); // 匹配请求函数：axiosInstance.post("/org", params)
-    result = axiosRequest.toString().match(regex);
-    if (result && result.length > 2) {
-      result = [result[1], result[2]].join(",");
+    result = axiosRequest.toString().match(/\.([^(]+)\("([^"]+)"/gi);
+    if (Array.isArray(result)) {
+      result = result.pop().match(/\.([^(]+)\("([^"]+)"/);
+      if (result && result.length > 2) {
+        result = [result[1], result[2]].join(",");
+      }
     }
   }
   return result;

@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div v-loading="loading" class="flex-col">
     <ToolBar>
       <el-button
         v-auth="account.add"
@@ -10,78 +10,80 @@
         添加
       </el-button>
     </ToolBar>
-    <!-- search -->
-    <el-form ref="searchForm" inline :model="queryParam">
-      <el-form-item label="账号">
-        <el-input v-model="queryParam.accountNumber"></el-input>
-      </el-form-item>
-      <el-form-item label="用户名">
-        <el-input v-model="queryParam.accountName"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="fetchData(true)">
-          <el-icon><search /></el-icon>
-          查询
-        </el-button>
-        <el-button @click="resetSearch()">
-          <el-icon><refresh /></el-icon>
-          重置
-        </el-button>
-      </el-form-item>
-    </el-form>
-    <!-- list -->
-    <p>
-      <el-icon><info-filled /></el-icon> 共
-      <el-button type="text">{{ totalCount }}</el-button> 条记录
-    </p>
-    <el-table :data="list">
-      <el-table-column
-        prop="accountNumber"
-        label="账号"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="accountName"
-        label="用户名"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="roleName"
-        label="角色"
-        align="center"
-      ></el-table-column>
-      <el-table-column label="状态" width="80" align="center">
-        <template #default="scope">
-          <template v-if="!scope.row.state">
-            <span style="color: #ff4949">已禁用</span>
+    <div class="flex-1 scrollbar">
+      <!-- search -->
+      <el-form ref="searchForm" inline :model="queryParam">
+        <el-form-item label="账号">
+          <el-input v-model="queryParam.accountNumber"></el-input>
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="queryParam.accountName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="fetchData(true)">
+            <el-icon><search /></el-icon>
+            查询
+          </el-button>
+          <el-button @click="resetSearch()">
+            <el-icon><refresh /></el-icon>
+            重置
+          </el-button>
+        </el-form-item>
+      </el-form>
+      <!-- list -->
+      <p>
+        <el-icon><info-filled /></el-icon> 共
+        <el-link>{{ totalCount }}</el-link> 条记录
+      </p>
+      <el-table :data="list">
+        <el-table-column
+          prop="accountNumber"
+          label="账号"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="accountName"
+          label="用户名"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="roleName"
+          label="角色"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="状态" width="80" align="center">
+          <template #default="scope">
+            <template v-if="!scope.row.state">
+              <span style="color: #ff4949">已禁用</span>
+            </template>
+            <template v-else>
+              <span style="color: #13ce66">已启用</span>
+            </template>
           </template>
-          <template v-else>
-            <span style="color: #13ce66">已启用</span>
+        </el-table-column>
+        <el-table-column label="操作" width="300" align="center">
+          <template #default="scope">
+            <el-button v-auth="account.edit" @click="edit(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              v-auth="account.resetPassword"
+              type="warning"
+              plain
+              @click="resetPassword(scope.row)"
+              >重置密码</el-button
+            >
+            <el-button
+              v-auth="account.remove"
+              type="danger"
+              plain
+              @click="remove(scope.row)"
+              >删除</el-button
+            >
           </template>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="300" align="center">
-        <template #default="scope">
-          <el-button v-auth="account.edit" @click="edit(scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            v-auth="account.resetPassword"
-            type="warning"
-            plain
-            @click="resetPassword(scope.row)"
-            >重置密码</el-button
-          >
-          <el-button
-            v-auth="account.remove"
-            type="danger"
-            plain
-            @click="remove(scope.row)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+        </el-table-column>
+      </el-table>
+    </div>
     <!-- page -->
     <Pagination
       :page-size="queryParam.pageSize"
@@ -200,7 +202,7 @@
 </template>
 
 <script>
-import { deepcopy } from "@/core";
+import { deepcopy } from "@/core/util";
 import * as account from "../api/account";
 import { list as requestRoles } from "../api/role";
 import { defineAsyncComponent } from "vue";
@@ -246,7 +248,7 @@ export default {
         state: 1,
       },
       queryParam: {
-        pageSize: 10,
+        pageSize: 20,
         p: 1,
         accountNumber: "",
         accountName: "",
@@ -270,7 +272,7 @@ export default {
   methods: {
     resetSearch() {
       this.queryParam = {
-        pageSize: 10,
+        pageSize: 20,
         p: 1,
         accountNumber: "",
         accountName: "",

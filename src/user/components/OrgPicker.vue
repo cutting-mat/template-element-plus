@@ -31,7 +31,7 @@
 
 <script>
 import { toRaw } from "vue";
-import { buildTree, deepcopy } from "@/core";
+import { buildTree, deepcopy } from "@/core/util";
 import { list } from "../api/org";
 import { defineAsyncComponent } from "vue";
 

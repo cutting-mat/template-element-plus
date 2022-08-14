@@ -1,6 +1,6 @@
 <template>
   <el-input
-    :modelValue="myValue"
+    :value="myValue"
     :placeholder="placeholder"
     :disabled="disabled"
     :size="size"
@@ -20,8 +20,12 @@
 <script>
 export default {
   name: "input-number",
+  model: {
+    prop: "value",
+    event: "change",
+  },
   props: {
-    modelValue: {
+    value: {
       /* 外部传值 */
       type: [String, Number],
       required: false,
@@ -82,7 +86,7 @@ export default {
     };
   },
   watch: {
-    modelValue: {
+    value: {
       handler(newVal) {
         let inputValue = newVal;
         if (!isNaN(parseFloat(inputValue))) {
@@ -100,7 +104,7 @@ export default {
     },
     myValue: {
       handler() {
-        this.$emit("update:modelValue", this.myValue);
+        this.$emit("change", this.myValue);
       },
       immediate: true,
     },

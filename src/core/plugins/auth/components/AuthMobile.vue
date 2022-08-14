@@ -5,42 +5,28 @@
     :rules="rules"
     label-position="left"
     class="auth_mobile"
-    :v-loading="loading"
+    @submit.native.prevent="handleSubmit"
   >
     <el-form-item v-if="anonymousMobile"
       >绑定手机：{{ anonymousMobile }}</el-form-item
     >
     <el-form-item prop="inputMobile">
-      <el-input
-        size="large"
-        v-model="formData.inputMobile"
-        placeholder="请输入绑定手机"
-      ></el-input>
-    </el-form-item>
-    <el-form-item prop="userInput">
-      <el-input
-        size="large"
-        v-model="formData.userInput"
-        placeholder="请输入验证码"
-      >
-        <template #append>
-          <CountdownButton
-            ref="countdownButton"
-            :count="30"
-            @click="sendValidCode"
-          >
-            获取验证码
-          </CountdownButton>
+      <el-input v-model="formData.inputMobile" placeholder="请输入绑定手机">
+        <template #prefix>
+          <el-icon><ChatLineSquare /></el-icon>
         </template>
       </el-input>
     </el-form-item>
+    <el-form-item prop="userInput">
+      <InputSMS
+        ref="InputSMS"
+        :type="command"
+        :mobile="formData.inputMobile"
+        @click="sendValidCode"
+      />
+    </el-form-item>
     <el-form-item>
-      <el-button
-        type="primary"
-        size="large"
-        style="width: 100%"
-        @click="handleSubmit"
-      >
+      <el-button native-type="submit" type="primary" style="width: 100%">
         立即验证
       </el-button>
     </el-form-item>
@@ -48,13 +34,9 @@
 </template>
 
 <script>
-import {
-  sendMobileValidCode,
-  sendMobileValidCodeResetPassword,
-  validateMobileValidCode,
-} from "@/core/plugins/auth/api/auth";
-
 export default {
+  name: "AuthMobile",
+  emits: ["success"],
   props: {
     command: {
       type: String,
@@ -72,29 +54,39 @@ export default {
             return callback(new Error("手机号不正确"));
           }
         }
+
         callback();
       }
     };
 
+    const validCode = () => {
+      return new Promise((resolve, reject) => {
+        this.$refs.InputSMS.valid()
+          .then((captcha) => {
+            this.resData = captcha;
+            resolve();
+          })
+          .catch((msg) => {
+            reject(msg);
+          });
+      });
+    };
+
     return {
-      loading: false,
       formData: {
         id: null,
-        userInput: null,
         inputMobile: null,
       },
       rules: {
         inputMobile: [{ validator: validateMobile, trigger: [] }],
-        userInput: [
-          { required: true, message: "请输入验证码", trigger: "blur" },
-          { min: 4, max: 6, message: "请输入正确的验证码", trigger: "blur" },
-        ],
+        userInput: [{ validator: validCode, trigger: [] }],
       },
+      resData: null,
     };
   },
   computed: {
     userMobile() {
-      return String(this.$store.state.user.contactNumber || "");
+      return String(this.$store.user.mobile || "");
     },
     anonymousMobile() {
       if (this.userMobile) {
@@ -114,50 +106,16 @@ export default {
   },
   methods: {
     sendValidCode() {
-      this.$refs.form.validateField("inputMobile", (valid) => {
-        if (valid) {
-          this.loading = true;
-          // 区分忘记密码和修改密码
-          const requestMethod =
-            this.command === "reset-pw"
-              ? sendMobileValidCodeResetPassword
-              : sendMobileValidCode;
-          requestMethod({
-            mobile: this.formData.inputMobile,
-          })
-            .then((res) => {
-              this.loading = false;
-              // 验证码已经发送
-              if (res.status === 200) {
-                this.formData.id = res.data.id;
-                this.$refs.countdownButton.start();
-              } else {
-                this.$message.warning(`验证码发送失败，请稍后重试`);
-              }
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+      this.$refs.form.validateField("inputMobile", (err) => {
+        if (!err) {
+          this.$refs.InputSMS.send();
         }
       });
     },
     handleSubmit() {
-      this.$refs.form.validateField("userInput", (valid) => {
+      this.$refs.form.validate((valid) => {
         if (valid) {
-          this.loading = true;
-          validateMobileValidCode(this.formData)
-            .then((res) => {
-              this.loading = false;
-              if (res.status === 200) {
-                this.$emit("success", res.data);
-              } else {
-                this.$refs.form.resetFields();
-                this.$message.warning(`验证失败`);
-              }
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+          this.$emit("success", this.resData);
         }
       });
     },
@@ -165,23 +123,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.auth_mobile :deep(.el-input-group__append) {
-  background-color: #409eff;
-  border: 0;
-}
-.auth_mobile :deep(.el-input-group__append .el-button) {
-  border-radius: 0;
-  margin: 0 -20px;
-}
-.auth_mobile :deep(.el-input-group__append .countdownButton) {
-  color: #fff;
-  background-color: #409eff;
-  border: 1px solid #409eff;
-}
-
-.auth_mobile :deep(.el-input-group__append .el-button.is-disabled) {
-  background-color: #a0cfff;
-  border-color: #a0cfff;
-}
-</style>
+<style scoped></style>

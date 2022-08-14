@@ -6,9 +6,7 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
   >
-    <template #title>
-      <div>验证身份（{{ currentAuthType.title }}）</div>
-    </template>
+    <template #header>验证身份（{{ currentAuthType.title }}）</template>
     <el-alert
       title="为确保您的账号安全，请先验证身份"
       type="success"
@@ -20,11 +18,13 @@
       :is="currentAuthType.name"
       :command="command"
       @success="handleSuccess"
-    />
+    >
+    </component>
     <div class="otherType" v-if="otherTypes.length">
       <ul class="flex-row">
         <li
           v-for="(type, index) in otherTypes"
+          :key="index"
           class="flex-1 _item"
           :title="type.title"
           @click="currentAuthType = type"
@@ -45,8 +45,13 @@ let components = {};
 AlluthTypes.forEach((type) => [(components[type.name] = type.component)]);
 
 export default {
+  model: {
+    prop: "value",
+    event: "change",
+  },
+  emits: ["change", "success"],
   props: {
-    modelValue: {
+    value: {
       type: Boolean,
       required: false,
       default: false,
@@ -61,7 +66,7 @@ export default {
     command: {
       type: String,
       required: false,
-      default: "common", // reset-pw
+      default: "common", // reset
     },
   },
   components,
@@ -69,7 +74,7 @@ export default {
     return {
       authTypes: [],
       dialogVisible: false,
-      currentAuthType: null,
+      currentAuthType: {},
       result: null,
     };
   },
@@ -90,17 +95,17 @@ export default {
       },
       immediate: true,
     },
-    modelValue: {
+    value: {
       handler() {
         if (this.currentAuthType) {
-          this.dialogVisible = this.modelValue;
+          this.dialogVisible = this.value;
         }
       },
       immediate: true,
     },
     dialogVisible: {
       handler() {
-        this.$emit("update:modelValue", this.dialogVisible);
+        this.$emit("change", this.dialogVisible);
       },
     },
   },

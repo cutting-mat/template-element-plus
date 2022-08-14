@@ -17,10 +17,10 @@
       <el-form label-width="80px" label-position="left">
         <el-form-item label="用户名">{{ userInfo.accountName }}</el-form-item>
         <el-form-item label="密码">
-          <el-button type="text" @click="handleChangePw">
+          <el-link type="primary" @click="handleChangePw">
             修改密码
             <el-icon><edit /></el-icon>
-          </el-button>
+          </el-link>
         </el-form-item>
         <el-form-item label="手机号">{{ userInfo.accountNumber }}</el-form-item>
         <el-form-item label="所属组织">{{ userInfo.orgName }}</el-form-item>
@@ -30,11 +30,12 @@
       </el-form>
     </div>
     <!-- 验证身份 -->
-    <auth ref="auth" />
+    <auth ref="auth" :types="['password', 'email', 'mobile']" />
   </div>
 </template>
 
 <script>
+import { inject } from "vue";
 import { edit } from "@/user/api/account";
 
 export default {
@@ -46,20 +47,20 @@ export default {
   },
   computed: {
     userInfo() {
-      return this.$store.state.user;
+      return this.$store.user;
     },
   },
   methods: {
     handleUpload(res) {
       if (res.url) {
         this.loading = true;
-        const newInfo = Object.assign({}, this.$store.state.user, {
+        const newInfo = Object.assign({}, this.$store.user, {
           avatar: res.url,
         });
         edit(newInfo)
           .then(() => {
             this.$store
-              .action("user", {
+              .getUser({
                 cache: "update",
               })
               .then(() => {

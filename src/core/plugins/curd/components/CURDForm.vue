@@ -50,8 +50,6 @@
 </template>
 
 <script>
-// import { deepcopy } from "@/core";
-
 export default {
   props: {
     model: {

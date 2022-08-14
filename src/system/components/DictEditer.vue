@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { deepcopy, buildTree } from "@/core";
+import { deepcopy, buildTree } from "@/core/util";
 import * as dict from "../api/dict";
 
 export default {

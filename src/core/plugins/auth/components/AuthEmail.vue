@@ -6,42 +6,36 @@
     label-position="left"
     class="auth_email"
     :v-loading="loading"
+    @submit.native.prevent="handleSubmit"
   >
     <el-form-item v-if="anonymousEmail"
       >安全邮箱：{{ anonymousEmail }}</el-form-item
     >
     <el-form-item prop="inputEmail">
-      <el-input
-        size="large"
-        v-model="formData.inputEmail"
-        placeholder="请输入安全邮箱"
-      >
+      <el-input v-model="formData.inputEmail" placeholder="请输入安全邮箱">
+        <template #prefix>
+          <el-icon><Message /></el-icon>
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item prop="userInput">
-      <el-input
-        size="large"
-        v-model="formData.userInput"
-        placeholder="请输入验证码"
-      >
+      <el-input v-model="formData.userInput" placeholder="请输入验证码">
         <template #append>
-          <countdownButton
-            ref="countdownButton"
-            :count="30"
-            @click="sendValidCode"
-          >
-            获取验证码
-          </countdownButton>
+          <el-button :disabled="buttonDisabled" @click="sendValidCode">
+            <CountDown
+              ref="countdownButton"
+              :count="30"
+              @start="buttonDisabled = true"
+              @end="buttonDisabled = false"
+            >
+              获取验证码
+            </CountDown>
+          </el-button>
         </template>
       </el-input>
     </el-form-item>
     <el-form-item>
-      <el-button
-        type="primary"
-        size="large"
-        style="width: 100%"
-        @click="handleSubmit"
-      >
+      <el-button native-type="submit" type="primary" style="width: 100%">
         立即验证
       </el-button>
     </el-form-item>
@@ -55,6 +49,8 @@ import {
 } from "@/core/plugins/auth/api/auth";
 
 export default {
+  name: "AuthEmail",
+  emits: ["success"],
   data() {
     const validateEmail = (rule, value, callback) => {
       if (!value) {
@@ -85,11 +81,12 @@ export default {
           { min: 4, max: 6, message: "请输入正确的验证码", trigger: "blur" },
         ],
       },
+      buttonDisabled: false,
     };
   },
   computed: {
     userEmail() {
-      return this.$store.state.user.email || "";
+      return this.$store.user.email || "";
     },
     anonymousEmail() {
       if (this.userEmail) {
@@ -109,8 +106,8 @@ export default {
   },
   methods: {
     sendValidCode() {
-      this.$refs.form.validateField("inputEmail", (valid) => {
-        if (valid) {
+      this.$refs.form.validateField("inputEmail", (err) => {
+        if (!err) {
           this.loading = true;
           emailValidCode({
             email: this.formData.inputEmail,
@@ -132,8 +129,8 @@ export default {
       });
     },
     handleSubmit() {
-      this.$refs.form.validateField("userInput", (valid) => {
-        if (valid) {
+      this.$refs.form.validateField("userInput", (err) => {
+        if (!err) {
           this.loading = true;
           validEmailValidCode(this.formData)
             .then((res) => {
@@ -155,23 +152,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.auth_email :deep(.el-input-group__append) {
-  background-color: #409eff;
-  border: 0;
-}
-.auth_email :deep(.el-input-group__append .el-button) {
-  border-radius: 0;
-  margin: 0 -20px;
-}
-.auth_email :deep(.el-input-group__append .countdownButton) {
-  color: #fff;
-  background-color: #409eff;
-  border: 1px solid #409eff;
-}
-
-.auth_email :deep(.el-input-group__append .el-button.is-disabled) {
-  background-color: #a0cfff;
-  border-color: #a0cfff;
-}
-</style>
+<style scoped></style>

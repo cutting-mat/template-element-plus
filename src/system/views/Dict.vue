@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { deepcopy } from "@/core";
+import { deepcopy } from "@/core/util";
 import * as dict from "../api/dict";
 import { defineAsyncComponent } from "vue";
 
@@ -152,7 +152,7 @@ export default {
         remark: "",
       },
       queryParam: {
-        pageSize: 10,
+        pageSize: 20,
         p: 1,
         dictName: "",
         testNull: null,

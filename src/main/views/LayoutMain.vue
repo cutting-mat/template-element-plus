@@ -15,7 +15,7 @@ const HomePage = defineAsyncComponent(() =>
       <!-- 首页 -->
       <HomePage v-if="$route.path == '/'" class="flex-1" />
       <!-- 内页 -->
-      <router-view v-else class="flex-1" />
+      <router-view v-else class="flex-1 main" />
     </div>
   </div>
 </template>
@@ -25,5 +25,8 @@ const HomePage = defineAsyncComponent(() =>
 
 .mainLayout {
   height: 100%;
+}
+.mainLayout .main {
+  padding: 0 20px;
 }
 </style>

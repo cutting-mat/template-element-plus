@@ -25,16 +25,14 @@
             </span>
           </div>
         </template>
-        <template v-for="(child, ci) in route.children">
+        <template v-for="(child, ci) in route.children" :key="'child' + ci">
           <!-- 三层 -->
-          <el-menu-item-group
-            v-if="child.children && child.children.length"
-            :route="child"
-            :index="child.name"
-          >
-            <template #title>
-              {{ (child.meta && child.meta.title) || child.name }}
-            </template>
+          <template v-if="child.children && child.children.length">
+            <el-menu-item :route="child" :index="child.name">
+              <template #title>
+                {{ (child.meta && child.meta.title) || child.name }}
+              </template>
+            </el-menu-item>
             <el-menu-item
               v-for="(grandson, grandsonindex) in child.children"
               :route="grandson"
@@ -47,7 +45,7 @@
                 </span>
               </template>
             </el-menu-item>
-          </el-menu-item-group>
+          </template>
           <!-- 两层 -->
           <el-menu-item
             v-else
@@ -86,7 +84,7 @@
 
 <script>
 import { MainRoute } from "@/route.config";
-import { deepcopy } from "@/core";
+import { deepcopy } from "@/core/util";
 // 过滤隐藏路由，扩展fullPath
 let filterRoutes = function (routeArray, base) {
   const array = routeArray.filter((e) => !e.meta || !e.meta.hide);
@@ -119,7 +117,6 @@ export default {
   },
   data() {
     return {
-      state: this.$store.state,
       list: [],
       showMenu: true,
     };
@@ -127,7 +124,7 @@ export default {
   computed: {
     menu: function () {
       return this.$AccessControl
-        ? this.state.DynamicRoute[0].children
+        ? this.$store.DynamicRoute[0].children
         : filterRoutes(MainRoute[0].children);
     },
     activeIndex() {
@@ -187,5 +184,54 @@ export default {
   padding: 10px;
   box-sizing: border-box;
   background: #f5f6f7;
+}
+.custom-menu :deep(.el-menu) {
+  border-right: 0;
+  background: transparent;
+}
+.custom-menu :deep(.ico) {
+  font-size: 1.3em;
+  display: inline-block;
+  margin-right: 8px;
+}
+.custom-menu :deep(.el-menu-item),
+.custom-menu :deep(.el-sub-menu__title) {
+  min-width: 100px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 6px;
+  color: #555;
+}
+.custom-menu li {
+  margin-top: 2px;
+}
+
+.custom-menu :deep(.second) {
+  padding-left: 40px;
+  padding-right: 0;
+  box-sizing: border-box;
+  color: #555;
+  border-radius: 6px;
+}
+
+.custom-menu :deep(.is-active) {
+  color: #0265ed;
+  background: #e6ecf8;
+}
+.custom-menu :deep(.el-menu-item:hover) {
+  background: #e6ecf8;
+}
+.custom-menu :deep(.el-menu-item-group__title) {
+  color: rgba(52, 104, 248, 0.8);
+  padding: 12px 0;
+}
+.custom-menu ul > li:last-child {
+  margin-bottom: 0;
+}
+.custom-menu :deep(.el-sub-menu .el-menu) {
+  padding: 0 20px;
+}
+.custom-menu :deep(.el-sub-menu.is-active.is-opened) {
+  background: transparent;
 }
 </style>
