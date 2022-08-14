@@ -1,0 +1,1 @@
+import{A as t}from"./index.cc0542f8.js";const r=e=>t.get("/role/s",{params:e}),o=e=>t.get("/role",{params:e}),n=e=>t.post("/role",e),s=e=>t.put("/role",e),l=e=>t.delete("/role",{params:e}),c=Object.freeze(Object.defineProperty({__proto__:null,list:r,detail:o,add:n,edit:s,remove:l},Symbol.toStringTag,{value:"Module"}));export{n as a,l as b,s as e,r as l,c as r};
