@@ -9,7 +9,7 @@
   "homepage": "https://cutting-mat.github.io/template-element-plus/",
   "dependencies": {
     "@cutting-mat/axios": "^1.2.0",
-    "@cutting-mat/uploader": "^3.1.0",
+    "@cutting-mat/uploader-plus": "^0.1.0",
     "@element-plus/icons-vue": "^2.0.9",
     "crypto-js": "^4.1.1",
     "element-plus": "^2.2.13",
