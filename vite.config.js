@@ -17,5 +17,12 @@ export default defineConfig({
     manifest: false,
     sourcemap: false,
     outDir: "dist",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          ui: ["element-plus"],
+        },
+      },
+    },
   },
 });
