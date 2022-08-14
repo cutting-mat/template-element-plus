@@ -1,1 +1,1 @@
-import{_ as o,r as t,o as r,g as n}from"./index.cc0542f8.js";const c={data(){return{}},methods:{},created:function(){}};function s(a,_,p,d,u,f){const e=t("router-view");return r(),n(e)}const m=o(c,[["render",s]]);export{m as default};
+import{_ as t,r as e,o as r,g as o}from"./index.cc0542f8.js";const a=t({data:()=>({}),methods:{},created:function(){}},[["render",function(t,a,n,s,c,d){const f=e("router-view");return r(),o(f)}]]);export{a as default};

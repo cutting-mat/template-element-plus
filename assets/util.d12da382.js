@@ -1,1 +1,1 @@
-const s={computed:{propsFinnal(){const n=t=>this.$props[t]===void 0&&Object.keys(this.$DictcontrolOption).indexOf(t)!==-1?this.$DictcontrolOption[t]:this.$props[t],i={};return Object.keys(this.$props).forEach(t=>{i[t]=n(t)}),i}}};export{s as m};
+const t={computed:{propsFinnal(){const t=t=>void 0===this.$props[t]&&-1!==Object.keys(this.$DictcontrolOption).indexOf(t)?this.$DictcontrolOption[t]:this.$props[t],o={};return Object.keys(this.$props).forEach((s=>{o[s]=t(s)})),o}}};export{t as m};

@@ -1,1 +1,1 @@
-import{_ as e,o,c as s}from"./index.cc0542f8.js";const c={},t={class:"scrollbar"};function a(r,n,_,p,l,d){return o(),s("div",t,"HomePage")}const i=e(c,[["render",a]]);export{i as default};
+import{_ as s,o,c as r}from"./index.cc0542f8.js";const a={class:"scrollbar"};const c=s({},[["render",function(s,c,e,n,t,d){return o(),r("div",a,"HomePage")}]]);export{c as default};
