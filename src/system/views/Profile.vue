@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import { inject } from "vue";
 import { edit } from "@/user/api/account";
 
 export default {

@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@cutting-mat/axios': ^1.2.0
-  '@cutting-mat/uploader-plus': ^0.1.0
+  '@cutting-mat/uploader-plus': ^0.1.1
   '@element-plus/icons-vue': ^2.0.9
   '@vitejs/plugin-vue': ^3.0.3
   crypto-js: ^4.1.1
@@ -24,7 +24,7 @@ specifiers:
 
 dependencies:
   '@cutting-mat/axios': 1.2.0
-  '@cutting-mat/uploader-plus': 0.1.0
+  '@cutting-mat/uploader-plus': 0.1.1
   '@element-plus/icons-vue': 2.0.9_vue@3.2.37
   crypto-js: 4.1.1
   element-plus: 2.2.13_vue@3.2.37
@@ -84,8 +84,8 @@ packages:
       - debug
     dev: false
 
-  /@cutting-mat/uploader-plus/0.1.0:
-    resolution: {integrity: sha512-KqejYsehfTVnyEq/zjfEuAWvmSleMFUIPr9HQ4I3TWAy7CVUS5L8zJxprqWFnIacFhMCQeAf+9qPZc8pTHmO2Q==}
+  /@cutting-mat/uploader-plus/0.1.1:
+    resolution: {integrity: sha512-gbelb7OhE5lq3zFPMfFy2zcfH+AIcvBi7gNipjqKSaxxPBMUYvu+O39e3yDktImLP8aUuJYS6bEq10bCiZdrmA==}
     dependencies:
       cropperjs: 1.5.12
       ios-photo-repair: 1.1.1
