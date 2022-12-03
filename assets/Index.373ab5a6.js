@@ -1,0 +1,1 @@
+import{_ as r}from"./index.3253e0ab.js";import{r as a,o,a as s}from"./ui.9933098f.js";const t=r({data:()=>({}),methods:{},created:function(){}},[["render",function(r,t,e,n,c,i){const d=a("router-view");return o(),s(d,{class:"scrollbar"})}]]);export{t as default};

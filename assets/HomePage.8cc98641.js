@@ -1,1 +1,0 @@
-import{_ as o}from"./index.e5690914.js";import{o as r,t as s}from"./ui.7155d707.js";const e={class:"scrollbar"};const t=o({},[["render",function(o,t,a,n,i,c){return r(),s("div",e,"HomePage")}]]);export{t as default};
