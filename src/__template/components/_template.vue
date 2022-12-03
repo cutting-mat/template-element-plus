@@ -4,21 +4,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     msg: {
       type: String,
-      required: false
+      required: false,
     },
   },
   data() {
-    return {
-
-    }
-  }
+    return {};
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

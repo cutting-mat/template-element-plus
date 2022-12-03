@@ -39,7 +39,7 @@
   </el-dialog>
 </template>
 
-<script>
+<script lang="ts">
 import AlluthTypes from "../config";
 let components = {};
 AlluthTypes.forEach((type) => [(components[type.name] = type.component)]);

@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { defineAsyncComponent } from "vue";
-const HomePage = defineAsyncComponent(() =>
-  import("../components/HomePage.vue")
+const HomePage = defineAsyncComponent(
+  () => import("../components/HomePage.vue")
 );
 </script>
 

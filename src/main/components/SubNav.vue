@@ -82,7 +82,7 @@
   </el-menu>
 </template>
 
-<script>
+<script lang="ts">
 import { MainRoute } from "@/route.config";
 import { deepcopy } from "@/core/util";
 // 过滤隐藏路由，扩展fullPath

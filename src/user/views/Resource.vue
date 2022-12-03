@@ -56,15 +56,15 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { buildTree, deepcopy } from "@/core/util";
 import * as resource from "../api/resource";
 import { defineAsyncComponent } from "vue";
 
 export default {
   components: {
-    TheResourcePicker: defineAsyncComponent(() =>
-      import("@/user/components/TheResourcePicker.vue")
+    TheResourcePicker: defineAsyncComponent(
+      () => import("@/user/components/TheResourcePicker.vue")
     ),
   },
   data() {

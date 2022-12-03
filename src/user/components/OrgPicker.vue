@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { toRaw } from "vue";
 import { buildTree, deepcopy } from "@/core/util";
 import { list } from "../api/org";

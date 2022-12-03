@@ -42,7 +42,7 @@
   </el-form>
 </template>
 
-<script>
+<script lang="ts">
 import {
   emailValidCode,
   validEmailValidCode,

@@ -78,15 +78,15 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { deepcopy } from "@/core/util";
 import * as role from "../api/role";
 import { defineAsyncComponent } from "vue";
 
 export default {
   components: {
-    TheResourcePicker: defineAsyncComponent(() =>
-      import("@/user/components/TheResourcePicker.vue")
+    TheResourcePicker: defineAsyncComponent(
+      () => import("@/user/components/TheResourcePicker.vue")
     ),
   },
   data() {

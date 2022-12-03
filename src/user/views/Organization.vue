@@ -58,7 +58,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { deepcopy } from "@/core/util";
 import * as org from "../api/org";
 import { defineAsyncComponent } from "vue";

@@ -5,7 +5,7 @@
   <LayoutMain v-else />
 </template>
 
-<script>
+<script lang="ts">
 import LayoutMain from "./LayoutMain.vue";
 import LayoutBlank from "./LayoutBlank.vue";
 

@@ -17,8 +17,8 @@
       <div v-else>
         <!-- 支持formatter内容 -->
         {{
-          scope.row[column.prop]
-            | formatterFilter(
+          scope.row[column.prop] |
+            formatterFilter(
               scope.row,
               scope.column,
               scope.$index,
@@ -51,7 +51,7 @@
   </el-table-column>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "CURDColumn",
   props: {

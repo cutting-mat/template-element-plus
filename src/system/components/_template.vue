@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     msg: String,
@@ -12,5 +12,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -17,7 +17,7 @@
   </el-input>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "input-number",
   model: {

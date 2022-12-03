@@ -7,7 +7,7 @@
   </span>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "count-down",
   emits: ["start", "end"],
@@ -18,12 +18,15 @@ export default {
     },
     format: {
       type: Function,
-      default(value) {
+      default(value: any) {
         return `${value}s`;
       },
     },
   },
-  data() {
+  data(): {
+    renderNumber: number | null;
+    timer: any;
+  } {
     return {
       renderNumber: null,
       timer: null,
@@ -31,10 +34,10 @@ export default {
   },
   methods: {
     start() {
-      return new Promise((resolve) => {
+      return new Promise<void>((resolve) => {
         this.renderNumber = this.count;
         this.timer = setInterval(() => {
-          if (this.renderNumber - 1 > 0) {
+          if (this.renderNumber && this.renderNumber - 1 > 0) {
             this.renderNumber--;
           } else {
             this.reset();

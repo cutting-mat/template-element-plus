@@ -72,7 +72,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { event } from "@/core";
 import { login } from "@/main/api/common";
 import { SetAccountToken } from "@/plugin.permission.config";

@@ -67,7 +67,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { validator } from "@/core/valid";
 import { register } from "@/main/api/common";
 

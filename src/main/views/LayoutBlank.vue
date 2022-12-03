@@ -1,17 +1,13 @@
 <template>
-  <router-view  />
+  <router-view />
 </template>
 
-<script>
-
+<script lang="ts">
 export default {
   data() {
     return {};
   },
-  
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

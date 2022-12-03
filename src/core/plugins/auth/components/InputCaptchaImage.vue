@@ -23,7 +23,7 @@
   </el-input>
 </template>
 
-<script>
+<script lang="ts">
 import { captchaImage, validateCaptchaImage } from "../api/auth";
 
 export default {

@@ -28,7 +28,7 @@
   </el-table>
 </template>
 
-<script>
+<script lang="ts">
 import { isReactive, toRaw } from "vue";
 import { list } from "../api/org";
 

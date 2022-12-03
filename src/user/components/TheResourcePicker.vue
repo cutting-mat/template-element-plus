@@ -84,7 +84,7 @@
   </el-tree>
 </template>
 
-<script>
+<script lang="ts">
 import { throttle, buildTree } from "@/core/util";
 import * as resource from "../api/resource";
 

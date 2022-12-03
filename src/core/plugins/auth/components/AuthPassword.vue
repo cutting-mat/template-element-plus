@@ -27,7 +27,7 @@
   </el-form>
 </template>
 
-<script>
+<script lang="ts">
 import { validPassword } from "@/core/plugins/auth/api/auth";
 
 export default {

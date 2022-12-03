@@ -11,7 +11,7 @@
   ></el-cascader>
 </template>
 
-<script>
+<script lang="ts">
 import { mixin } from "../assets/util";
 
 export default {

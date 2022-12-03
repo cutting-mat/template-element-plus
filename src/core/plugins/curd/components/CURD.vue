@@ -129,7 +129,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { deepcopy, buildTree } from "@/core/util";
 
 export default {
@@ -228,15 +228,6 @@ export default {
       },
     },
   },
-  filters: {
-    formatterFilter(cellValue, row, column, index, formatter) {
-      if (typeof formatter === "function") {
-        return formatter(row, column, cellValue, index);
-      } else {
-        return cellValue;
-      }
-    },
-  },
   components: {
     CURDForm: () => import("./CURDForm.vue"),
     CURDColumn: () => import("./CURDColumn.vue"),
@@ -260,37 +251,37 @@ export default {
         clearSelection: () => {
           return this.$refs.table.clearSelection();
         },
-        toggleRowSelection: (row, selected) => {
+        toggleRowSelection: (row: any, selected: any) => {
           return this.$refs.table.toggleRowSelection(row, selected);
         },
         toggleAllSelection: () => {
           return this.$refs.table.toggleAllSelection();
         },
-        toggleRowExpansion: (row, expanded) => {
+        toggleRowExpansion: (row: any, expanded: any) => {
           return this.$refs.table.toggleRowExpansion(row, expanded);
         },
-        setCurrentRow: (row) => {
+        setCurrentRow: (row: any) => {
           return this.$refs.table.setCurrentRow(row);
         },
         clearSort: () => {
           return this.$refs.table.clearSort();
         },
-        clearFilter: (columnKey) => {
+        clearFilter: (columnKey: number) => {
           return this.$refs.table.clearFilter(columnKey);
         },
         doLayout: () => {
           return this.$refs.table.doLayout();
         },
-        sort: (prop, order) => {
+        sort: (prop: any, order: any) => {
           return this.$refs.table.clearFilter(prop, order);
         },
       },
       form: {
         // 暴露 el-form 方法
-        validate: (callback) => {
+        validate: (callback: any) => {
           return this.$refs.editForm.validate(callback);
         },
-        validateField: (props, callback) => {
+        validateField: (props: any, callback: any) => {
           return this.$refs.editForm.validateField(props, callback);
         },
         resetFields: () => {

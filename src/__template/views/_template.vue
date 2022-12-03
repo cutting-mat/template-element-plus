@@ -2,7 +2,7 @@
   <div>blank</div>
 </template>
 
-<script>
+<script lang="ts">
 //import { util } from '@/core';
 
 export default {
@@ -14,5 +14,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

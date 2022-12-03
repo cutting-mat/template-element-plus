@@ -15,7 +15,7 @@
   </el-input>
 </template>
 
-<script>
+<script lang="ts">
 import {
   sendMobileValidCode,
   sendMobileValidCodeRegister,

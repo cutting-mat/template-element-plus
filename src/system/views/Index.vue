@@ -2,7 +2,7 @@
   <router-view class="scrollbar" />
 </template>
 
-<script>
+<script lang="ts">
 export default {
   data() {
     return {};
@@ -12,5 +12,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

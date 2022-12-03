@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { edit } from "@/user/api/account";
 
 export default {

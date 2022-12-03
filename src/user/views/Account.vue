@@ -201,7 +201,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { deepcopy } from "@/core/util";
 import * as account from "../api/account";
 import { list as requestRoles } from "../api/role";
@@ -209,8 +209,8 @@ import { defineAsyncComponent } from "vue";
 
 export default {
   components: {
-    OrgPicker: defineAsyncComponent(() =>
-      import("../components/OrgPicker.vue")
+    OrgPicker: defineAsyncComponent(
+      () => import("../components/OrgPicker.vue")
     ),
   },
   data() {

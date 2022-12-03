@@ -1,13 +1,13 @@
 <template>
   <el-drawer
-    v-model="visible"
+    v-model="isVisible"
     direction="rtl"
     size="900px"
     :withHeader="false"
     @opened="handleInit"
     @close="requireClose"
   >
-    <div class="myform flex-col" v-loading="loading">
+    <div class="flex-col myform" v-loading="loading">
       <ToolBar title="字典数据维护" :back="requireClose">
         <el-button
           v-auth="dict.itemAdd"
@@ -84,7 +84,7 @@
   </el-drawer>
 </template>
 
-<script>
+<script lang="ts">
 import { deepcopy, buildTree } from "@/core/util";
 import * as dict from "../api/dict";
 
@@ -102,6 +102,7 @@ export default {
   },
   data() {
     return {
+      isVisible: this.visible,
       dict,
       loading: true,
       dialogVisible: false,
@@ -136,8 +137,11 @@ export default {
     };
   },
   watch: {
-    dictCode: function () {
-      this.queryParam.dictCode = this.dictCode;
+    dictCode: {
+      handler() {
+        this.queryParam.dictCode = this.dictCode;
+      },
+      immediate: true,
     },
   },
   methods: {

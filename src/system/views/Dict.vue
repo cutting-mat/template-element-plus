@@ -114,7 +114,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { deepcopy } from "@/core/util";
 import * as dict from "../api/dict";
 import { defineAsyncComponent } from "vue";
@@ -135,8 +135,8 @@ export default {
     },
   },
   components: {
-    DictEditer: defineAsyncComponent(() =>
-      import("../components/DictEditer.vue")
+    DictEditer: defineAsyncComponent(
+      () => import("../components/DictEditer.vue")
     ),
   },
   data() {

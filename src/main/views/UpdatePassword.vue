@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { editPassword } from "../api/personal";
 
 export default {

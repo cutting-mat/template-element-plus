@@ -33,7 +33,7 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 import { event } from "@/core";
 
 export default {

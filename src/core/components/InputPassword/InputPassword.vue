@@ -31,7 +31,7 @@
   </el-input>
 </template>
 
-<script>
+<script lang="ts">
 import { checkPassword } from "./assets/checkpassword";
 
 export default {
